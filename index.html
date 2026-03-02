@@ -27,7 +27,7 @@ body {
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 60px;
+    width: 120px;
 }
 
 #score {
@@ -49,8 +49,8 @@ body {
 
 <div id="game">
     <div id="score">Puntos: 0</div>
-    <div id="containerType">Contenedor: Reciclaje ♻️</div>
-    <div id="bin">♻️</div>
+    <div id="containerType">Contenedor: reciclaje</div>
+    <img id="bin" src="reciclaje.png">
 </div>
 
 <script>
@@ -64,13 +64,13 @@ let binPosition = window.innerWidth / 2;
 let currentContainer = "reciclaje";
 
 const containers = [
-    { type: "reciclaje", emoji: "♻️" },
-    { type: "organico", emoji: "🟤" },
-    { type: "basura", emoji: "🗑️" }
+    { type: "reciclaje", image: "reciclaje.png" },
+    { type: "organico", image: "organico.png" },
+    { type: "basura", image: "metal.png" }
 ];
 
 const items = [
-    { type: "reciclaje", emoji: "🧴" }, // botella vacía
+    { type: "reciclaje", emoji: "🧴" },
     { type: "organico", emoji: "🍎" },
     { type: "basura", emoji: "🔋" }
 ];
@@ -83,8 +83,8 @@ document.addEventListener("mousemove", (e) => {
 function changeContainer() {
     const random = containers[Math.floor(Math.random() * containers.length)];
     currentContainer = random.type;
-    bin.textContent = random.emoji;
-    containerDisplay.textContent = "Contenedor: " + random.type + " " + random.emoji;
+    bin.src = random.image;
+    containerDisplay.textContent = "Contenedor: " + random.type;
 }
 
 setInterval(changeContainer, 10000);
