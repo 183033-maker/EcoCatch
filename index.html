@@ -28,6 +28,7 @@ body {
     left: 50%;
     transform: translateX(-50%);
     width: 120px;
+    height: auto;
 }
 
 #score {
@@ -50,7 +51,7 @@ body {
 <div id="game">
     <div id="score">Puntos: 0</div>
     <div id="containerType">Contenedor: reciclaje</div>
-    <img id="bin" src="reciclaje.png">
+    <img id="bin" src="./reciclaje.png" alt="bote">
 </div>
 
 <script>
@@ -60,13 +61,12 @@ const scoreDisplay = document.getElementById("score");
 const containerDisplay = document.getElementById("containerType");
 
 let score = 0;
-let binPosition = window.innerWidth / 2;
 let currentContainer = "reciclaje";
 
 const containers = [
-    { type: "reciclaje", image: "reciclaje.png" },
-    { type: "organico", image: "organico.png" },
-    { type: "basura", image: "metal.png" }
+    { type: "reciclaje", image: "./reciclaje.png" },
+    { type: "organico", image: "./organico.png" },
+    { type: "basura", image: "./metal.png" }
 ];
 
 const items = [
@@ -76,8 +76,7 @@ const items = [
 ];
 
 document.addEventListener("mousemove", (e) => {
-    binPosition = e.clientX;
-    bin.style.left = binPosition + "px";
+    bin.style.left = e.clientX + "px";
 });
 
 function changeContainer() {
