@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>EcoCatch</title>
+<title>Juego de Reciclaje</title>
 
 <style>
 body {
@@ -63,8 +63,9 @@ body {
 <div id="game">
     <div id="score">Puntos: 0</div>
     <div id="containerType">Contenedor: Reciclaje</div>
+
     <div id="bin">
-        <img src="imagenes/botereciclaje.png" alt="Contenedor">
+        <img src="botereciclaje.png" alt="Contenedor">
     </div>
 </div>
 
@@ -77,28 +78,28 @@ const containerDisplay = document.getElementById("containerType");
 let score = 0;
 let currentContainer = "reciclaje";
 
-// Contenedores
+// CONTENEDORES (IMÁGENES EN LA RAÍZ)
 const containers = [
-    { type: "reciclaje", img: "imagenes/botereciclaje.png", name: "Reciclaje" },
-    { type: "organico", img: "imagenes/boteorganico.png", name: "Orgánico" },
-    { type: "basura", img: "imagenes/botebasura.png", name: "Basura general" }
+    { type: "reciclaje", img: "botereciclaje.png", name: "Reciclaje" },
+    { type: "organico", img: "boteorganico.png", name: "Orgánico" },
+    { type: "basura", img: "botebasura.png", name: "Basura general" }
 ];
 
-// Objetos que caen
+// OBJETOS QUE CAEN (USAN LAS MISMAS IMÁGENES)
 const items = [
-    { type: "reciclaje", img: "imagenes/botelladeplastico.png" },
-    { type: "organico", img: "imagenes/restosdecomida.png" },
-    { type: "basura", img: "imagenes/latas.png" } // 👈 LATAS
+    { type: "reciclaje", img: "botereciclaje.png" }, // botella/lata reciclaje
+    { type: "organico", img: "boteorganico.png" },   // restos de comida
+    { type: "basura", img: "botebasura.png" }        // latas como basura
 ];
 
-// Movimiento del contenedor
+// MOVER CONTENEDOR CON EL MOUSE
 document.addEventListener("mousemove", (e) => {
     let x = e.clientX - bin.offsetWidth / 2;
     x = Math.max(0, Math.min(window.innerWidth - bin.offsetWidth, x));
     bin.style.left = x + "px";
 });
 
-// Cambiar contenedor cada 10 segundos
+// CAMBIAR CONTENEDOR CADA 10 SEGUNDOS
 function changeContainer() {
     const random = containers[Math.floor(Math.random() * containers.length)];
     currentContainer = random.type;
@@ -107,7 +108,7 @@ function changeContainer() {
 }
 setInterval(changeContainer, 10000);
 
-// Crear objetos
+// CREAR OBJETOS QUE CAEN
 function createItem() {
     const randomItem = items[Math.floor(Math.random() * items.length)];
 
@@ -129,6 +130,7 @@ function createItem() {
         const binRect = bin.getBoundingClientRect();
         const itemRect = element.getBoundingClientRect();
 
+        // COLISIÓN
         if (
             itemRect.bottom >= binRect.top &&
             itemRect.left + itemRect.width / 2 >= binRect.left &&
@@ -140,6 +142,7 @@ function createItem() {
             clearInterval(fallInterval);
         }
 
+        // SALE DE PANTALLA
         if (top > window.innerHeight) {
             element.remove();
             clearInterval(fallInterval);
@@ -152,4 +155,3 @@ setInterval(createItem, 1000);
 
 </body>
 </html>
-
