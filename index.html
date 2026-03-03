@@ -27,8 +27,7 @@ body {
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    width: 120px;
-    height: auto;
+    font-size: 60px;
 }
 
 #score {
@@ -50,8 +49,8 @@ body {
 
 <div id="game">
     <div id="score">Puntos: 0</div>
-    <div id="containerType">Contenedor: reciclaje</div>
-    <img id="bin" src="./reciclaje.png" alt="bote">
+    <div id="containerType">Contenedor: Reciclaje ♻️</div>
+    <div id="bin">♻️</div>
 </div>
 
 <script>
@@ -61,29 +60,31 @@ const scoreDisplay = document.getElementById("score");
 const containerDisplay = document.getElementById("containerType");
 
 let score = 0;
+let binPosition = window.innerWidth / 2;
 let currentContainer = "reciclaje";
 
 const containers = [
-    { type: "reciclaje", image: "./https://es.dreamstime.com/basurero-con-botellas-pl%C3%A1sticas-para-clasificar-y-reciclar-como-vector-de-ecolog%C3%ADa-protecci%C3%B3n-del-medio-ambiente-conservaci%C3%B3n-image228733301" },
-    { type: "organico", image: "./https://es.123rf.com/photo_170643079_contenedor-de-basura-con-residuos-reciclables-bote-de-basura-org%C3%A1nico-ilustraci%C3%B3n-de-vector-aislado.html" },
-    { type: "basura", image: "./https://www.google.com/imgres?q=bote%20de%20reciclaje%20metal&imgurl=https%3A%2F%2Fimg.freepik.com%2Fvector-premium%2Fpapelera-reciclaje-metal-contenedor-basura_176411-6012.jpg&imgrefurl=https%3A%2F%2Fwww.freepik.es%2Fvector-premium%2Fpapelera-reciclaje-metal-contenedor-basura_39204852.htm&docid=686l3bB3BIz76M&tbnid=BVfvL4LH2WKw3M&vet=12ahUKEwi435-U9YOTAxVoIkQIHeq-DeQQnPAOegQIHxAB..i&w=312&h=626&hcb=2&ved=2ahUKEwi435-U9YOTAxVoIkQIHeq-DeQQnPAOegQIHxAB&safe=active&ssui=on" }
+    { type: "reciclaje", emoji: "♻️" },
+    { type: "organico", emoji: "🟤" },
+    { type: "basura", emoji: "🗑️" }
 ];
 
 const items = [
-    { type: "reciclaje", emoji: "🧴" },
+    { type: "reciclaje", emoji: "🧴" }, // botella vacía
     { type: "organico", emoji: "🍎" },
     { type: "basura", emoji: "🔋" }
 ];
 
 document.addEventListener("mousemove", (e) => {
-    bin.style.left = e.clientX + "px";
+    binPosition = e.clientX;
+    bin.style.left = binPosition + "px";
 });
 
 function changeContainer() {
     const random = containers[Math.floor(Math.random() * containers.length)];
     currentContainer = random.type;
-    bin.src = random.image;
-    containerDisplay.textContent = "Contenedor: " + random.type;
+    bin.textContent = random.emoji;
+    containerDisplay.textContent = "Contenedor: " + random.type + " " + random.emoji;
 }
 
 setInterval(changeContainer, 10000);
@@ -131,4 +132,3 @@ setInterval(createItem, 1000);
 
 </body>
 </html>
-
