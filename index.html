@@ -20,14 +20,26 @@ body {
 
 .falling {
     position: absolute;
-    font-size: 30px;
     user-select: none;
+}
+
+.falling img {
+    width: 40px;
+    height: 40px;
+    pointer-events: none;
 }
 
 #bin {
     position: absolute;
     bottom: 20px;
-    font-size: 60px;
+    width: 70px;
+    height: 70px;
+}
+
+#bin img {
+    width: 70px;
+    height: 70px;
+    pointer-events: none;
 }
 
 #score {
@@ -50,8 +62,10 @@ body {
 
 <div id="game">
     <div id="score">Puntos: 0</div>
-    <div id="containerType">Contenedor: Reciclaje ♻️</div>
-    <div id="bin">♻️</div>
+    <div id="containerType">Contenedor: Reciclaje</div>
+    <div id="bin">
+        <img src="imagenes/botereciclaje.png" alt="Contenedor">
+    </div>
 </div>
 
 <script>
@@ -63,49 +77,49 @@ const containerDisplay = document.getElementById("containerType");
 let score = 0;
 let currentContainer = "reciclaje";
 
-// Tipos de contenedores
+// Contenedores
 const containers = [
-    { type: "reciclaje", emoji: "♻️", name: "Reciclaje" },
-    { type: "organico", emoji: "🟤", name: "Orgánico" },
-    { type: "basura", emoji: "🗑️", name: "Basura" }
+    { type: "reciclaje", img: "imagenes/botereciclaje.png", name: "Reciclaje" },
+    { type: "organico", img: "imagenes/boteorganico.png", name: "Orgánico" },
+    { type: "basura", img: "imagenes/botebasura.png", name: "Basura general" }
 ];
 
 // Objetos que caen
 const items = [
-    { type: "reciclaje", emoji: "🧴" },
-    { type: "organico", emoji: "🍎" },
-    { type: "basura", emoji: "🔋" }
+    { type: "reciclaje", img: "imagenes/botelladeplastico.png" },
+    { type: "organico", img: "imagenes/restosdecomida.png" },
+    { type: "basura", img: "imagenes/latas.png" } // 👈 LATAS
 ];
 
 // Movimiento del contenedor
 document.addEventListener("mousemove", (e) => {
     let x = e.clientX - bin.offsetWidth / 2;
-
-    // Límites
     x = Math.max(0, Math.min(window.innerWidth - bin.offsetWidth, x));
     bin.style.left = x + "px";
 });
 
-// Cambiar tipo de contenedor
+// Cambiar contenedor cada 10 segundos
 function changeContainer() {
     const random = containers[Math.floor(Math.random() * containers.length)];
     currentContainer = random.type;
-    bin.textContent = random.emoji;
-    containerDisplay.textContent = `Contenedor: ${random.name} ${random.emoji}`;
+    bin.innerHTML = `<img src="${random.img}" alt="${random.name}">`;
+    containerDisplay.textContent = `Contenedor: ${random.name}`;
 }
-
 setInterval(changeContainer, 10000);
 
-// Crear objetos que caen
+// Crear objetos
 function createItem() {
     const randomItem = items[Math.floor(Math.random() * items.length)];
-    const element = document.createElement("div");
 
+    const element = document.createElement("div");
     element.className = "falling";
-    element.textContent = randomItem.emoji;
-    element.style.left = Math.random() * (window.innerWidth - 30) + "px";
+    element.style.left = Math.random() * (window.innerWidth - 40) + "px";
     element.style.top = "0px";
 
+    const img = document.createElement("img");
+    img.src = randomItem.img;
+
+    element.appendChild(img);
     game.appendChild(element);
 
     const fallInterval = setInterval(() => {
@@ -115,7 +129,6 @@ function createItem() {
         const binRect = bin.getBoundingClientRect();
         const itemRect = element.getBoundingClientRect();
 
-        // Colisión
         if (
             itemRect.bottom >= binRect.top &&
             itemRect.left + itemRect.width / 2 >= binRect.left &&
@@ -123,12 +136,10 @@ function createItem() {
         ) {
             score += (randomItem.type === currentContainer) ? 10 : -5;
             scoreDisplay.textContent = "Puntos: " + score;
-
             element.remove();
             clearInterval(fallInterval);
         }
 
-        // Sale de pantalla
         if (top > window.innerHeight) {
             element.remove();
             clearInterval(fallInterval);
