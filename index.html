@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Juego de Reciclaje</title>
+
 <style>
 body {
     margin: 0;
@@ -20,13 +21,12 @@ body {
 .falling {
     position: absolute;
     font-size: 30px;
+    user-select: none;
 }
 
 #bin {
     position: absolute;
     bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
     font-size: 60px;
 }
 
@@ -45,6 +45,7 @@ body {
 }
 </style>
 </head>
+
 <body>
 
 <div id="game">
@@ -60,66 +61,74 @@ const scoreDisplay = document.getElementById("score");
 const containerDisplay = document.getElementById("containerType");
 
 let score = 0;
-let binPosition = window.innerWidth / 2;
 let currentContainer = "reciclaje";
 
+// Tipos de contenedores
 const containers = [
-    { type: "reciclaje", emoji: "♻️" },
-    { type: "organico", emoji: "🟤" },
-    { type: "basura", emoji: "🗑️" }
+    { type: "reciclaje", emoji: "♻️", name: "Reciclaje" },
+    { type: "organico", emoji: "🟤", name: "Orgánico" },
+    { type: "basura", emoji: "🗑️", name: "Basura" }
 ];
 
+// Objetos que caen
 const items = [
-    { type: "reciclaje", emoji: "🧴" }, // botella vacía
+    { type: "reciclaje", emoji: "🧴" },
     { type: "organico", emoji: "🍎" },
     { type: "basura", emoji: "🔋" }
 ];
 
+// Movimiento del contenedor
 document.addEventListener("mousemove", (e) => {
-    binPosition = e.clientX;
-    bin.style.left = binPosition + "px";
+    let x = e.clientX - bin.offsetWidth / 2;
+
+    // Límites
+    x = Math.max(0, Math.min(window.innerWidth - bin.offsetWidth, x));
+    bin.style.left = x + "px";
 });
 
+// Cambiar tipo de contenedor
 function changeContainer() {
     const random = containers[Math.floor(Math.random() * containers.length)];
     currentContainer = random.type;
     bin.textContent = random.emoji;
-    containerDisplay.textContent = "Contenedor: " + random.type + " " + random.emoji;
+    containerDisplay.textContent = `Contenedor: ${random.name} ${random.emoji}`;
 }
 
 setInterval(changeContainer, 10000);
 
+// Crear objetos que caen
 function createItem() {
     const randomItem = items[Math.floor(Math.random() * items.length)];
     const element = document.createElement("div");
-    element.classList.add("falling");
+
+    element.className = "falling";
     element.textContent = randomItem.emoji;
-    element.style.left = Math.random() * window.innerWidth + "px";
+    element.style.left = Math.random() * (window.innerWidth - 30) + "px";
     element.style.top = "0px";
+
     game.appendChild(element);
 
-    let fallInterval = setInterval(() => {
+    const fallInterval = setInterval(() => {
         let top = parseInt(element.style.top);
         element.style.top = top + 5 + "px";
 
         const binRect = bin.getBoundingClientRect();
         const itemRect = element.getBoundingClientRect();
 
+        // Colisión
         if (
             itemRect.bottom >= binRect.top &&
-            itemRect.left < binRect.right &&
-            itemRect.right > binRect.left
+            itemRect.left + itemRect.width / 2 >= binRect.left &&
+            itemRect.right - itemRect.width / 2 <= binRect.right
         ) {
-            if (randomItem.type === currentContainer) {
-                score += 10;
-            } else {
-                score -= 5;
-            }
+            score += (randomItem.type === currentContainer) ? 10 : -5;
             scoreDisplay.textContent = "Puntos: " + score;
+
             element.remove();
             clearInterval(fallInterval);
         }
 
+        // Sale de pantalla
         if (top > window.innerHeight) {
             element.remove();
             clearInterval(fallInterval);
