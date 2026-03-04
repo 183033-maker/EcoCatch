@@ -21,7 +21,6 @@ body {
 /* OBJETOS */
 .falling {
     position: absolute;
-    user-select: none;
 }
 
 .falling img {
@@ -46,7 +45,7 @@ body {
     height: 85px !important;
 }
 
-/* CONTENEDORES */
+/* CONTENEDOR */
 #bin {
     position: absolute;
     bottom: 20px;
@@ -57,7 +56,6 @@ body {
 #bin img {
     width: 170px;
     height: 170px;
-    pointer-events: none;
 }
 
 /* UI */
@@ -75,13 +73,12 @@ body {
     font-size: 20px;
 }
 
-/* ⏱️ CONTADOR */
 #timer {
     position: absolute;
     bottom: 10px;
     left: 10px;
     font-size: 18px;
-    background: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.8);
     padding: 6px 10px;
     border-radius: 8px;
 }
@@ -92,12 +89,10 @@ body {
 
 <div id="game">
     <div id="score">Puntos: 0</div>
-    <div id="containerType">Contenedor: Reciclaje</div>
+    <div id="containerType">Contenedor:</div>
     <div id="timer">Cambio de bote en: 5</div>
 
-    <div id="bin">
-        <img src="botereciclaje.png" alt="Contenedor">
-    </div>
+    <div id="bin"></div>
 </div>
 
 <script>
@@ -108,9 +103,7 @@ const containerDisplay = document.getElementById("containerType");
 const timerDisplay = document.getElementById("timer");
 
 let score = 0;
-let currentContainer = "reciclaje";
-
-/* ⏱️ CONTADOR */
+let currentContainer = "";
 let timeLeft = 5;
 
 /* CONTENEDORES */
@@ -147,17 +140,19 @@ function changeContainer() {
     containerDisplay.textContent = `Contenedor: ${r.name}`;
 }
 
-/* ⏱️ contador cada segundo */
+/* ⏱️ CONTADOR REAL */
 setInterval(() => {
-    timeLeft--;
     timerDisplay.textContent = `Cambio de bote en: ${timeLeft}`;
+    timeLeft--;
 
-    if (timeLeft === 0) {
+    if (timeLeft < 0) {
         changeContainer();
         timeLeft = 5;
-        timerDisplay.textContent = `Cambio de bote en: ${timeLeft}`;
     }
 }, 1000);
+
+/* iniciar con un bote */
+changeContainer();
 
 /* crear objetos */
 function createItem() {
