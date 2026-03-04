@@ -18,7 +18,7 @@ body {
     height: 100vh;
 }
 
-/* OBJETOS QUE CAEN */
+/* OBJETOS */
 .falling {
     position: absolute;
     user-select: none;
@@ -30,31 +30,28 @@ body {
     pointer-events: none;
 }
 
-/* 🍎 Manzana aún más chiquita */
+/* tamaños especiales */
 .manzana {
     width: 22px !important;
     height: 22px !important;
 }
 
-/* CONTENEDORES */
+.grande {
+    width: 65px !important;
+    height: 65px !important;
+}
+
+/* CONTENEDORES (todos iguales) */
 #bin {
     position: absolute;
     bottom: 20px;
-}
-
-/* Tamaño normal de botes */
-.bin-normal {
-    width: 150px;
-    height: 150px;
-}
-
-/* 🟡 Bote amarillo más ancho */
-.bin-ancho {
-    width: 190px;
-    height: 150px;
+    width: 170px;
+    height: 170px;
 }
 
 #bin img {
+    width: 170px;
+    height: 170px;
     pointer-events: none;
 }
 
@@ -81,8 +78,8 @@ body {
     <div id="score">Puntos: 0</div>
     <div id="containerType">Contenedor: Reciclaje</div>
 
-    <div id="bin" class="bin-normal">
-        <img src="botereciclaje.png" alt="Contenedor" width="150" height="150">
+    <div id="bin">
+        <img src="botereciclaje.png" alt="Contenedor">
     </div>
 </div>
 
@@ -95,82 +92,77 @@ const containerDisplay = document.getElementById("containerType");
 let score = 0;
 let currentContainer = "reciclaje";
 
-// CONTENEDORES
+/* CONTENEDORES */
 const containers = [
-    { type: "reciclaje", img: "botereciclaje.png", name: "Reciclaje", class: "bin-normal", w:150, h:150 },
-    { type: "organico", img: "boteorganico.png", name: "Orgánico", class: "bin-normal", w:150, h:150 },
-    { type: "basura", img: "botebasura.png", name: "Basura general", class: "bin-ancho", w:190, h:150 }
+    { type: "reciclaje", img: "botereciclaje.png", name: "Reciclaje" },
+    { type: "organico", img: "boteorganico.png", name: "Orgánico" },
+    { type: "basura", img: "botebasura.png", name: "Basura general" }
 ];
 
-// OBJETOS QUE CAEN
+/* OBJETOS */
 const items = [
     { type: "reciclaje", img: "botella_plastico.png" },
     { type: "reciclaje", img: "caja_carton.png" },
+
     { type: "organico", img: "manzana.png", class: "manzana" },
-    { type: "organico", img: "platano.png" },
+    { type: "organico", img: "platano.png", class: "grande" },
+
     { type: "basura", img: "papel_usado.png" },
-    { type: "basura", img: "envoltura_sabritas.png" }
+    { type: "basura", img: "envoltura_sabritas.png", class: "grande" }
 ];
 
-// MOVER CONTENEDOR
-document.addEventListener("mousemove", (e) => {
+/* mover contenedor */
+document.addEventListener("mousemove", e => {
     let x = e.clientX - bin.offsetWidth / 2;
     x = Math.max(0, Math.min(window.innerWidth - bin.offsetWidth, x));
     bin.style.left = x + "px";
 });
 
-// CAMBIAR CONTENEDOR
+/* cambiar contenedor */
 function changeContainer() {
-    const random = containers[Math.floor(Math.random() * containers.length)];
-    currentContainer = random.type;
-
-    bin.className = random.class;
-    bin.innerHTML = `<img src="${random.img}" alt="${random.name}" width="${random.w}" height="${random.h}">`;
-
-    containerDisplay.textContent = `Contenedor: ${random.name}`;
+    const r = containers[Math.floor(Math.random() * containers.length)];
+    currentContainer = r.type;
+    bin.innerHTML = `<img src="${r.img}" alt="${r.name}">`;
+    containerDisplay.textContent = `Contenedor: ${r.name}`;
 }
 setInterval(changeContainer, 10000);
 
-// CREAR OBJETOS
+/* crear objetos */
 function createItem() {
-    const randomItem = items[Math.floor(Math.random() * items.length)];
+    const r = items[Math.floor(Math.random() * items.length)];
 
-    const element = document.createElement("div");
-    element.className = "falling";
-    element.style.left = Math.random() * (window.innerWidth - 45) + "px";
-    element.style.top = "0px";
+    const el = document.createElement("div");
+    el.className = "falling";
+    el.style.left = Math.random() * (window.innerWidth - 65) + "px";
+    el.style.top = "0px";
 
     const img = document.createElement("img");
-    img.src = randomItem.img;
+    img.src = r.img;
+    if (r.class) img.classList.add(r.class);
 
-    if (randomItem.class) {
-        img.classList.add(randomItem.class);
-    }
+    el.appendChild(img);
+    game.appendChild(el);
 
-    element.appendChild(img);
-    game.appendChild(element);
+    const fall = setInterval(() => {
+        el.style.top = (parseInt(el.style.top) + 5) + "px";
 
-    const fallInterval = setInterval(() => {
-        let top = parseInt(element.style.top);
-        element.style.top = top + 5 + "px";
-
-        const binRect = bin.getBoundingClientRect();
-        const itemRect = element.getBoundingClientRect();
+        const b = bin.getBoundingClientRect();
+        const i = el.getBoundingClientRect();
 
         if (
-            itemRect.bottom >= binRect.top &&
-            itemRect.left + itemRect.width / 2 >= binRect.left &&
-            itemRect.right - itemRect.width / 2 <= binRect.right
+            i.bottom >= b.top &&
+            i.left + i.width / 2 >= b.left &&
+            i.right - i.width / 2 <= b.right
         ) {
-            score += (randomItem.type === currentContainer) ? 10 : -5;
+            score += (r.type === currentContainer) ? 10 : -5;
             scoreDisplay.textContent = "Puntos: " + score;
-            element.remove();
-            clearInterval(fallInterval);
+            el.remove();
+            clearInterval(fall);
         }
 
-        if (top > window.innerHeight) {
-            element.remove();
-            clearInterval(fallInterval);
+        if (parseInt(el.style.top) > window.innerHeight) {
+            el.remove();
+            clearInterval(fall);
         }
     }, 20);
 }
