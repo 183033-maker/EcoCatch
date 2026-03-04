@@ -30,23 +30,23 @@ body {
     pointer-events: none;
 }
 
-/* Manzana un poco más pequeña */
+/* 🍎 Manzana más chiquita */
 .manzana {
-    width: 38px !important;
-    height: 38px !important;
+    width: 28px !important;
+    height: 28px !important;
 }
 
-/* CONTENEDOR */
+/* CONTENEDORES MÁS GRANDES */
 #bin {
     position: absolute;
     bottom: 20px; /* misma altura */
-    width: 110px;
-    height: 110px;
+    width: 150px;
+    height: 150px;
 }
 
 #bin img {
-    width: 110px;
-    height: 110px;
+    width: 150px;
+    height: 150px;
     pointer-events: none;
 }
 
@@ -96,10 +96,15 @@ const containers = [
 
 // OBJETOS QUE CAEN
 const items = [
+    // ♻️ Reciclaje
     { type: "reciclaje", img: "botella_plastico.png" },
     { type: "reciclaje", img: "caja_carton.png" },
+
+    // 🍎 Orgánico
     { type: "organico", img: "manzana.png", class: "manzana" },
     { type: "organico", img: "platano.png" },
+
+    // 🗑️ Basura general
     { type: "basura", img: "papel_usado.png" },
     { type: "basura", img: "envoltura_sabritas.png" }
 ];
