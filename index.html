@@ -41,6 +41,12 @@ body {
     height: 65px !important;
 }
 
+/* 🟨 envoltura sabritas EXTRA GRANDE */
+.muy-grande {
+    width: 85px !important;
+    height: 85px !important;
+}
+
 /* CONTENEDORES (todos iguales) */
 #bin {
     position: absolute;
@@ -108,7 +114,7 @@ const items = [
     { type: "organico", img: "platano.png", class: "grande" },
 
     { type: "basura", img: "papel_usado.png" },
-    { type: "basura", img: "envoltura_sabritas.png", class: "grande" }
+    { type: "basura", img: "envoltura_sabritas.png", class: "muy-grande" }
 ];
 
 /* mover contenedor */
@@ -133,7 +139,7 @@ function createItem() {
 
     const el = document.createElement("div");
     el.className = "falling";
-    el.style.left = Math.random() * (window.innerWidth - 65) + "px";
+    el.style.left = Math.random() * (window.innerWidth - 85) + "px";
     el.style.top = "0px";
 
     const img = document.createElement("img");
