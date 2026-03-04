@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>EcoCatch</title>
+<title>Juego de Reciclaje</title>
 
 <style>
 body {
@@ -31,8 +31,8 @@ body {
 
 /* tamaños especiales */
 .manzana {
-    width: 22px !important;
-    height: 22px !important;
+    width: 26px !important;
+    height: 26px !important;
 }
 
 .grande {
@@ -40,9 +40,10 @@ body {
     height: 65px !important;
 }
 
+/* 🟨 envoltura sabritas */
 .muy-grande {
-    width: 85px !important;
-    height: 85px !important;
+    width: 70px !important;
+    height: 70px !important;
 }
 
 /* CONTENEDOR */
@@ -73,10 +74,11 @@ body {
     font-size: 20px;
 }
 
+/* ⏱️ CONTADOR a la derecha */
 #timer {
     position: absolute;
     bottom: 10px;
-    left: 10px;
+    right: 10px;
     font-size: 18px;
     background: rgba(255,255,255,0.8);
     padding: 6px 10px;
@@ -140,7 +142,7 @@ function changeContainer() {
     containerDisplay.textContent = `Contenedor: ${r.name}`;
 }
 
-/* ⏱️ CONTADOR REAL */
+/* ⏱️ contador */
 setInterval(() => {
     timerDisplay.textContent = `Cambio de bote en: ${timeLeft}`;
     timeLeft--;
@@ -151,7 +153,7 @@ setInterval(() => {
     }
 }, 1000);
 
-/* iniciar con un bote */
+/* iniciar */
 changeContainer();
 
 /* crear objetos */
@@ -199,4 +201,3 @@ setInterval(createItem, 1000);
 
 </body>
 </html>
-
