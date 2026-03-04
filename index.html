@@ -78,28 +78,36 @@ const containerDisplay = document.getElementById("containerType");
 let score = 0;
 let currentContainer = "reciclaje";
 
-// CONTENEDORES (IMÁGENES EN LA RAÍZ)
+// CONTENEDORES
 const containers = [
     { type: "reciclaje", img: "botereciclaje.png", name: "Reciclaje" },
     { type: "organico", img: "boteorganico.png", name: "Orgánico" },
     { type: "basura", img: "botebasura.png", name: "Basura general" }
 ];
 
-// OBJETOS QUE CAEN (USAN LAS MISMAS IMÁGENES)
+// OBJETOS QUE CAEN (ACTUALIZADO)
 const items = [
-    { type: "reciclaje", img: "botereciclaje.png" }, // botella/lata reciclaje
-    { type: "organico", img: "boteorganico.png" },   // restos de comida
-    { type: "basura", img: "botebasura.png" }        // latas como basura
+    // ♻️ Reciclaje
+    { type: "reciclaje", img: "botella_plastico.png" },
+    { type: "reciclaje", img: "caja_carton.png" },
+
+    // 🍎 Orgánico
+    { type: "organico", img: "manzana.png" },
+    { type: "organico", img: "platano.png" },
+
+    // 🗑️ Basura general
+    { type: "basura", img: "papel_usado.png" },
+    { type: "basura", img: "envoltura_sabritas.png" }
 ];
 
-// MOVER CONTENEDOR CON EL MOUSE
+// MOVER CONTENEDOR
 document.addEventListener("mousemove", (e) => {
     let x = e.clientX - bin.offsetWidth / 2;
     x = Math.max(0, Math.min(window.innerWidth - bin.offsetWidth, x));
     bin.style.left = x + "px";
 });
 
-// CAMBIAR CONTENEDOR CADA 10 SEGUNDOS
+// CAMBIAR CONTENEDOR
 function changeContainer() {
     const random = containers[Math.floor(Math.random() * containers.length)];
     currentContainer = random.type;
@@ -108,7 +116,7 @@ function changeContainer() {
 }
 setInterval(changeContainer, 10000);
 
-// CREAR OBJETOS QUE CAEN
+// CREAR OBJETOS
 function createItem() {
     const randomItem = items[Math.floor(Math.random() * items.length)];
 
@@ -130,7 +138,6 @@ function createItem() {
         const binRect = bin.getBoundingClientRect();
         const itemRect = element.getBoundingClientRect();
 
-        // COLISIÓN
         if (
             itemRect.bottom >= binRect.top &&
             itemRect.left + itemRect.width / 2 >= binRect.left &&
@@ -142,7 +149,6 @@ function createItem() {
             clearInterval(fallInterval);
         }
 
-        // SALE DE PANTALLA
         if (top > window.innerHeight) {
             element.remove();
             clearInterval(fallInterval);
