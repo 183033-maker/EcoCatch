@@ -41,13 +41,12 @@ body {
     height: 65px !important;
 }
 
-/* 🟨 envoltura sabritas EXTRA GRANDE */
 .muy-grande {
     width: 85px !important;
     height: 85px !important;
 }
 
-/* CONTENEDORES (todos iguales) */
+/* CONTENEDORES */
 #bin {
     position: absolute;
     bottom: 20px;
@@ -75,6 +74,17 @@ body {
     right: 10px;
     font-size: 20px;
 }
+
+/* ⏱️ CONTADOR */
+#timer {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    font-size: 18px;
+    background: rgba(255,255,255,0.7);
+    padding: 6px 10px;
+    border-radius: 8px;
+}
 </style>
 </head>
 
@@ -83,6 +93,7 @@ body {
 <div id="game">
     <div id="score">Puntos: 0</div>
     <div id="containerType">Contenedor: Reciclaje</div>
+    <div id="timer">Cambio de bote en: 5</div>
 
     <div id="bin">
         <img src="botereciclaje.png" alt="Contenedor">
@@ -94,9 +105,13 @@ const game = document.getElementById("game");
 const bin = document.getElementById("bin");
 const scoreDisplay = document.getElementById("score");
 const containerDisplay = document.getElementById("containerType");
+const timerDisplay = document.getElementById("timer");
 
 let score = 0;
 let currentContainer = "reciclaje";
+
+/* ⏱️ CONTADOR */
+let timeLeft = 5;
 
 /* CONTENEDORES */
 const containers = [
@@ -131,7 +146,18 @@ function changeContainer() {
     bin.innerHTML = `<img src="${r.img}" alt="${r.name}">`;
     containerDisplay.textContent = `Contenedor: ${r.name}`;
 }
-setInterval(changeContainer, 10000);
+
+/* ⏱️ contador cada segundo */
+setInterval(() => {
+    timeLeft--;
+    timerDisplay.textContent = `Cambio de bote en: ${timeLeft}`;
+
+    if (timeLeft === 0) {
+        changeContainer();
+        timeLeft = 5;
+        timerDisplay.textContent = `Cambio de bote en: ${timeLeft}`;
+    }
+}, 1000);
 
 /* crear objetos */
 function createItem() {
