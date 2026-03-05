@@ -104,11 +104,14 @@ const scoreDisplay = document.getElementById("score");
 const containerDisplay = document.getElementById("containerType");
 const timerDisplay = document.getElementById("timer");
 
+/* centrar el bote al iniciar */
+bin.style.left = (window.innerWidth / 2 - 85) + "px";
+
 let score = 0;
 let currentContainer = "";
 let timeLeft = 5;
 
-/* 🔊 SONIDOS */
+/* SONIDOS */
 const sonidoCorrecto = new Audio("correcto.mp3");
 const sonidoIncorrecto = new Audio("incorrecto.mp3");
 const musica = new Audio("musica.mp3");
@@ -116,7 +119,6 @@ const musica = new Audio("musica.mp3");
 musica.loop = true;
 musica.volume = 0.25;
 
-/* iniciar musica al hacer clic */
 window.addEventListener("click", () => {
     musica.play();
 });
@@ -230,4 +232,3 @@ setInterval(createItem, 1000);
 
 </body>
 </html>
-
