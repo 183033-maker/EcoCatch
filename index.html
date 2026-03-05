@@ -5,78 +5,42 @@
 <title>EcoCatch</title>
 
 <style>
-body {
-    margin: 0;
-    overflow: hidden;
-    background: #87CEEB;
-    font-family: Arial, sans-serif;
+body{
+margin:0;
+overflow:hidden;
+background:#87CEEB;
+font-family:Arial;
 }
 
-#game {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
+#game{
+position:relative;
+width:100vw;
+height:100vh;
 }
 
-.falling {
-    position: absolute;
+.objeto{
+position:absolute;
+width:80px;
 }
 
-.falling img {
-    width: 45px;
-    height: 45px;
-    pointer-events: none;
+.bote{
+position:absolute;
+bottom:20px;
+width:120px;
 }
 
-.manzana {
-    width: 26px !important;
-    height: 26px !important;
-}
+#basura{left:15%;}
+#organico{left:45%;}
+#reciclaje{left:75%;}
 
-.grande {
-    width: 65px !important;
-    height: 65px !important;
-}
-
-.muy-grande {
-    width: 70px !important;
-    height: 70px !important;
-}
-
-#bin {
-    position: absolute;
-    bottom: 20px;
-    width: 170px;
-    height: 170px;
-}
-
-#bin img {
-    width: 170px;
-    height: 170px;
-}
-
-#score {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 20px;
-}
-
-#containerType {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 20px;
-}
-
-#timer {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    font-size: 18px;
-    background: rgba(255,255,255,0.8);
-    padding: 6px 10px;
-    border-radius: 8px;
+#puntaje{
+position:absolute;
+top:10px;
+left:10px;
+font-size:24px;
+background:white;
+padding:10px;
+border-radius:10px;
 }
 </style>
 </head>
@@ -84,148 +48,101 @@ body {
 <body>
 
 <div id="game">
-    <div id="score">Puntos: 0</div>
-    <div id="containerType">Contenedor:</div>
-    <div id="timer">Cambio de bote en: 5</div>
 
-    <div id="bin"></div>
+<div id="puntaje">Puntos: 0</div>
+
+<img id="basura" class="bote" src="botebasura.png">
+<img id="organico" class="bote" src="boteorganico.png">
+<img id="reciclaje" class="bote" src="botereciclaje.png">
+
 </div>
 
 <script>
 
-const game = document.getElementById("game");
-const bin = document.getElementById("bin");
-const scoreDisplay = document.getElementById("score");
-const containerDisplay = document.getElementById("containerType");
-const timerDisplay = document.getElementById("timer");
+let puntos = 0
 
-/* centrar bote */
-bin.style.left = (window.innerWidth / 2 - 85) + "px";
+// SONIDOS
+const sonidoCorrecto = new Audio("correcto.mp3")
+const sonidoIncorrecto = new Audio("incorrecto.mp3")
+const musica = new Audio("musica.mp3")
 
-let score = 0;
-let currentContainer = "";
-let timeLeft = 5;
+sonidoCorrecto.volume = 1
+sonidoIncorrecto.volume = 1
+musica.volume = 0.4
+musica.loop = true
 
-/* SONIDOS */
-const sonidoCorrecto = new Audio("correcto.mp3");
-const sonidoIncorrecto = new Audio("incorrecto.mp3");
-const musica = new Audio("musica.mp3");
 
-musica.loop = true;
-musica.volume = 0.25;
+// iniciar música al primer click
+document.addEventListener("click", () => {
+musica.play()
+},{once:true})
 
-window.addEventListener("click", () => {
-    musica.play();
-});
 
-/* CONTENEDORES */
-const containers = [
-    { type: "reciclaje", img: "botereciclaje.png", name: "Reciclaje" },
-    { type: "organico", img: "boteorganico.png", name: "Orgánico" },
-    { type: "basura", img: "botebasura.png", name: "Basura general" }
-];
+function crearObjeto(){
 
-/* OBJETOS */
-const items = [
-    { type: "reciclaje", img: "botella_plastico.png" },
-    { type: "reciclaje", img: "caja_carton.png" },
+const objetos = [
+{img:"botella_plastico.png", tipo:"reciclaje"},
+{img:"caja_carton.png", tipo:"reciclaje"},
+{img:"papel_usado.png", tipo:"reciclaje"},
+{img:"envoltura_sabritas.png", tipo:"basura"},
+{img:"manzana.png", tipo:"organico"},
+{img:"platano.png", tipo:"organico"}
+]
 
-    { type: "organico", img: "manzana.png", class: "manzana" },
-    { type: "organico", img: "platano.png", class: "grande" },
+let obj = objetos[Math.floor(Math.random()*objetos.length)]
 
-    { type: "basura", img: "papel_usado.png" },
-    { type: "basura", img: "envoltura_sabritas.png", class: "muy-grande" }
-];
+let elemento = document.createElement("img")
+elemento.src = obj.img
+elemento.classList.add("objeto")
 
-/* mover contenedor */
-document.addEventListener("mousemove", e => {
-    let x = e.clientX - bin.offsetWidth / 2;
-    x = Math.max(0, Math.min(window.innerWidth - bin.offsetWidth, x));
-    bin.style.left = x + "px";
-});
+elemento.style.left = Math.random()*90+"vw"
+elemento.style.top = "-100px"
 
-/* cambiar contenedor */
-function changeContainer() {
-    const r = containers[Math.floor(Math.random() * containers.length)];
-    currentContainer = r.type;
-    bin.innerHTML = `<img src="${r.img}" alt="${r.name}">`;
-    containerDisplay.textContent = `Contenedor: ${r.name}`;
+document.getElementById("game").appendChild(elemento)
+
+let y = -100
+
+let caer = setInterval(()=>{
+
+y+=5
+elemento.style.top = y+"px"
+
+if(y>window.innerHeight-150){
+
+let boteCorrecto = document.getElementById(obj.tipo)
+
+let rect1 = elemento.getBoundingClientRect()
+let rect2 = boteCorrecto.getBoundingClientRect()
+
+if(
+rect1.left < rect2.right &&
+rect1.right > rect2.left &&
+rect1.bottom > rect2.top
+){
+
+puntos++
+document.getElementById("puntaje").innerText = "Puntos: "+puntos
+
+sonidoCorrecto.currentTime = 0
+sonidoCorrecto.play()
+
+}else{
+
+sonidoIncorrecto.currentTime = 0
+sonidoIncorrecto.play()
+
 }
 
-/* contador */
-setInterval(() => {
-    timerDisplay.textContent = `Cambio de bote en: ${timeLeft}`;
-    timeLeft--;
+clearInterval(caer)
+elemento.remove()
 
-    if (timeLeft < 0) {
-        changeContainer();
-        timeLeft = 5;
-    }
-}, 1000);
-
-changeContainer();
-
-/* crear objetos */
-function createItem() {
-
-    const r = items[Math.floor(Math.random() * items.length)];
-
-    const el = document.createElement("div");
-    el.className = "falling";
-    el.style.left = Math.random() * (window.innerWidth - 85) + "px";
-    el.style.top = "0px";
-
-    const img = document.createElement("img");
-    img.src = r.img;
-
-    if (r.class) img.classList.add(r.class);
-
-    el.appendChild(img);
-    game.appendChild(el);
-
-    const fall = setInterval(() => {
-
-        el.style.top = (parseInt(el.style.top) + 5) + "px";
-
-        const b = bin.getBoundingClientRect();
-        const i = el.getBoundingClientRect();
-
-        if (
-            i.bottom >= b.top &&
-            i.left + i.width / 2 >= b.left &&
-            i.right - i.width / 2 <= b.right
-        ) {
-
-            if (r.type === currentContainer) {
-                score += 10;
-
-                sonidoCorrecto.pause();
-                sonidoCorrecto.currentTime = 0;
-                sonidoCorrecto.play();
-
-            } else {
-                score -= 5;
-
-                sonidoIncorrecto.pause();
-                sonidoIncorrecto.currentTime = 0;
-                sonidoIncorrecto.play();
-            }
-
-            scoreDisplay.textContent = "Puntos: " + score;
-
-            el.remove();
-            clearInterval(fall);
-        }
-
-        if (parseInt(el.style.top) > window.innerHeight) {
-            el.remove();
-            clearInterval(fall);
-        }
-
-    }, 20);
 }
 
-setInterval(createItem, 1000);
+},30)
+
+}
+
+setInterval(crearObjeto,1500)
 
 </script>
 
