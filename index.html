@@ -40,7 +40,7 @@ body {
     height: 65px !important;
 }
 
-/* 🟨 envoltura sabritas */
+/* envoltura sabritas */
 .muy-grande {
     width: 70px !important;
     height: 70px !important;
@@ -74,7 +74,6 @@ body {
     font-size: 20px;
 }
 
-/* ⏱️ CONTADOR a la derecha */
 #timer {
     position: absolute;
     bottom: 10px;
@@ -98,6 +97,7 @@ body {
 </div>
 
 <script>
+
 const game = document.getElementById("game");
 const bin = document.getElementById("bin");
 const scoreDisplay = document.getElementById("score");
@@ -107,6 +107,19 @@ const timerDisplay = document.getElementById("timer");
 let score = 0;
 let currentContainer = "";
 let timeLeft = 5;
+
+/* 🔊 SONIDOS */
+const sonidoCorrecto = new Audio("correcto.mp3");
+const sonidoIncorrecto = new Audio("incorrecto.mp3");
+const musica = new Audio("musica.mp3");
+
+musica.loop = true;
+musica.volume = 0.25;
+
+/* iniciar musica al hacer clic */
+window.addEventListener("click", () => {
+    musica.play();
+});
 
 /* CONTENEDORES */
 const containers = [
@@ -142,7 +155,7 @@ function changeContainer() {
     containerDisplay.textContent = `Contenedor: ${r.name}`;
 }
 
-/* ⏱️ contador */
+/* contador */
 setInterval(() => {
     timerDisplay.textContent = `Cambio de bote en: ${timeLeft}`;
     timeLeft--;
@@ -158,6 +171,7 @@ changeContainer();
 
 /* crear objetos */
 function createItem() {
+
     const r = items[Math.floor(Math.random() * items.length)];
 
     const el = document.createElement("div");
@@ -167,12 +181,14 @@ function createItem() {
 
     const img = document.createElement("img");
     img.src = r.img;
+
     if (r.class) img.classList.add(r.class);
 
     el.appendChild(img);
     game.appendChild(el);
 
     const fall = setInterval(() => {
+
         el.style.top = (parseInt(el.style.top) + 5) + "px";
 
         const b = bin.getBoundingClientRect();
@@ -183,8 +199,19 @@ function createItem() {
             i.left + i.width / 2 >= b.left &&
             i.right - i.width / 2 <= b.right
         ) {
-            score += (r.type === currentContainer) ? 10 : -5;
+
+            if (r.type === currentContainer) {
+                score += 10;
+                sonidoCorrecto.currentTime = 0;
+                sonidoCorrecto.play();
+            } else {
+                score -= 5;
+                sonidoIncorrecto.currentTime = 0;
+                sonidoIncorrecto.play();
+            }
+
             scoreDisplay.textContent = "Puntos: " + score;
+
             el.remove();
             clearInterval(fall);
         }
@@ -193,10 +220,12 @@ function createItem() {
             el.remove();
             clearInterval(fall);
         }
+
     }, 20);
 }
 
 setInterval(createItem, 1000);
+
 </script>
 
 </body>
