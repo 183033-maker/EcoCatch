@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>A FLIPAR COMO AL ESTILO DULDUL</title>
+<title>EcoCatch</title>
 
 <style>
 body {
@@ -87,7 +87,6 @@ body {
     <div id="score">Puntos: 0</div>
     <div id="containerType">Contenedor:</div>
     <div id="timer">Cambio de bote en: 5</div>
-
     <div id="bin"></div>
 </div>
 
@@ -99,9 +98,13 @@ const scoreDisplay = document.getElementById("score");
 const containerDisplay = document.getElementById("containerType");
 const timerDisplay = document.getElementById("timer");
 
-/* centrar bote */
+/* posición inicial */
 let binX = window.innerWidth / 2 - 85;
 bin.style.left = binX + "px";
+
+let moveLeft = false;
+let moveRight = false;
+const speed = 7;
 
 let score = 0;
 let currentContainer = "";
@@ -118,6 +121,50 @@ musica.volume = 0.25;
 window.addEventListener("click", () => {
     musica.play();
 });
+
+/* CONTROLES */
+
+document.addEventListener("keydown", e => {
+
+    if (e.key === "a" || e.key === "ArrowLeft") {
+        moveLeft = true;
+    }
+
+    if (e.key === "d" || e.key === "ArrowRight") {
+        moveRight = true;
+    }
+
+});
+
+document.addEventListener("keyup", e => {
+
+    if (e.key === "a" || e.key === "ArrowLeft") {
+        moveLeft = false;
+    }
+
+    if (e.key === "d" || e.key === "ArrowRight") {
+        moveRight = false;
+    }
+
+});
+
+/* movimiento continuo */
+
+setInterval(() => {
+
+    if (moveLeft) {
+        binX -= speed;
+    }
+
+    if (moveRight) {
+        binX += speed;
+    }
+
+    binX = Math.max(0, Math.min(window.innerWidth - bin.offsetWidth, binX));
+    bin.style.left = binX + "px";
+
+}, 16);
+
 
 /* CONTENEDORES */
 const containers = [
@@ -138,26 +185,8 @@ const items = [
     { type: "basura", img: "envoltura_sabritas.png", class: "muy-grande" }
 ];
 
-/* MOVIMIENTO CON TECLADO */
-
-const speed = 20;
-
-document.addEventListener("keydown", e => {
-
-    if (e.key === "a" || e.key === "ArrowLeft") {
-        binX -= speed;
-    }
-
-    if (e.key === "d" || e.key === "ArrowRight") {
-        binX += speed;
-    }
-
-    binX = Math.max(0, Math.min(window.innerWidth - bin.offsetWidth, binX));
-    bin.style.left = binX + "px";
-
-});
-
 /* cambiar contenedor */
+
 function changeContainer() {
     const r = containers[Math.floor(Math.random() * containers.length)];
     currentContainer = r.type;
@@ -166,7 +195,9 @@ function changeContainer() {
 }
 
 /* contador */
+
 setInterval(() => {
+
     timerDisplay.textContent = `Cambio de bote en: ${timeLeft}`;
     timeLeft--;
 
@@ -174,11 +205,13 @@ setInterval(() => {
         changeContainer();
         timeLeft = 5;
     }
+
 }, 1000);
 
 changeContainer();
 
 /* crear objetos */
+
 function createItem() {
 
     const r = items[Math.floor(Math.random() * items.length)];
@@ -210,18 +243,19 @@ function createItem() {
         ) {
 
             if (r.type === currentContainer) {
-                score += 10;
 
+                score += 10;
                 sonidoCorrecto.pause();
                 sonidoCorrecto.currentTime = 0;
                 sonidoCorrecto.play();
 
             } else {
-                score -= 5;
 
+                score -= 5;
                 sonidoIncorrecto.pause();
                 sonidoIncorrecto.currentTime = 0;
                 sonidoIncorrecto.play();
+
             }
 
             scoreDisplay.textContent = "Puntos: " + score;
@@ -244,4 +278,3 @@ setInterval(createItem, 1000);
 
 </body>
 </html>
-
