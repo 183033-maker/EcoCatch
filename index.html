@@ -18,7 +18,6 @@ body {
     height: 100vh;
 }
 
-/* OBJETOS */
 .falling {
     position: absolute;
 }
@@ -29,7 +28,6 @@ body {
     pointer-events: none;
 }
 
-/* tamaños especiales */
 .manzana {
     width: 26px !important;
     height: 26px !important;
@@ -40,13 +38,11 @@ body {
     height: 65px !important;
 }
 
-/* envoltura sabritas */
 .muy-grande {
     width: 70px !important;
     height: 70px !important;
 }
 
-/* CONTENEDOR */
 #bin {
     position: absolute;
     bottom: 20px;
@@ -59,7 +55,6 @@ body {
     height: 170px;
 }
 
-/* UI */
 #score {
     position: absolute;
     top: 10px;
@@ -104,7 +99,7 @@ const scoreDisplay = document.getElementById("score");
 const containerDisplay = document.getElementById("containerType");
 const timerDisplay = document.getElementById("timer");
 
-/* centrar el bote al iniciar */
+/* centrar bote */
 bin.style.left = (window.innerWidth / 2 - 85) + "px";
 
 let score = 0;
@@ -168,7 +163,6 @@ setInterval(() => {
     }
 }, 1000);
 
-/* iniciar */
 changeContainer();
 
 /* crear objetos */
@@ -204,10 +198,15 @@ function createItem() {
 
             if (r.type === currentContainer) {
                 score += 10;
+
+                sonidoCorrecto.pause();
                 sonidoCorrecto.currentTime = 0;
                 sonidoCorrecto.play();
+
             } else {
                 score -= 5;
+
+                sonidoIncorrecto.pause();
                 sonidoIncorrecto.currentTime = 0;
                 sonidoIncorrecto.play();
             }
@@ -232,6 +231,3 @@ setInterval(createItem, 1000);
 
 </body>
 </html>
-
-
-<!-- update -->
