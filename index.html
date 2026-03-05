@@ -100,7 +100,8 @@ const containerDisplay = document.getElementById("containerType");
 const timerDisplay = document.getElementById("timer");
 
 /* centrar bote */
-bin.style.left = (window.innerWidth / 2 - 85) + "px";
+let binX = window.innerWidth / 2 - 85;
+bin.style.left = binX + "px";
 
 let score = 0;
 let currentContainer = "";
@@ -137,11 +138,23 @@ const items = [
     { type: "basura", img: "envoltura_sabritas.png", class: "muy-grande" }
 ];
 
-/* mover contenedor */
-document.addEventListener("mousemove", e => {
-    let x = e.clientX - bin.offsetWidth / 2;
-    x = Math.max(0, Math.min(window.innerWidth - bin.offsetWidth, x));
-    bin.style.left = x + "px";
+/* MOVIMIENTO CON TECLADO */
+
+const speed = 20;
+
+document.addEventListener("keydown", e => {
+
+    if (e.key === "a" || e.key === "ArrowLeft") {
+        binX -= speed;
+    }
+
+    if (e.key === "d" || e.key === "ArrowRight") {
+        binX += speed;
+    }
+
+    binX = Math.max(0, Math.min(window.innerWidth - bin.offsetWidth, binX));
+    bin.style.left = binX + "px";
+
 });
 
 /* cambiar contenedor */
