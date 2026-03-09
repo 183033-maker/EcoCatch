@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>jabali</title>
+<title>chantilli</title>
 
 <style>
 
@@ -13,11 +13,110 @@ background:#87CEEB;
 font-family:Arial;
 }
 
+/* GAME */
+
 #game{
 position:relative;
 width:100vw;
 height:100vh;
 }
+
+/* LOBBY */
+
+#lobby{
+position:fixed;
+top:0;
+left:0;
+width:100vw;
+height:100vh;
+background:#9ED84E;
+z-index:999;
+}
+
+/* LOGO */
+
+#logoLobby{
+position:absolute;
+top:40px;
+right:60px;
+width:200px;
+}
+
+/* IMAGENES LOBBY */
+
+.lobbyImg{
+position:absolute;
+}
+
+#reciclaje{
+top:60px;
+left:70px;
+width:140px;
+}
+
+#botella{
+top:30px;
+left:240px;
+width:60px;
+}
+
+#caja{
+top:110px;
+left:240px;
+width:70px;
+}
+
+#organico{
+top:200px;
+left:70px;
+width:140px;
+}
+
+#manzana{
+top:210px;
+left:240px;
+width:55px;
+}
+
+#platano{
+top:280px;
+left:240px;
+width:90px;
+}
+
+#basura{
+top:380px;
+left:70px;
+width:140px;
+}
+
+#sabritas{
+top:390px;
+left:240px;
+width:80px;
+}
+
+#papel{
+top:450px;
+left:240px;
+width:60px;
+}
+
+/* BOTON JUGAR */
+
+#playBtn{
+position:absolute;
+bottom:120px;
+right:160px;
+font-size:50px;
+padding:25px 70px;
+border:8px solid black;
+border-radius:20px;
+background:#9ED84E;
+cursor:pointer;
+}
+
+/* OBJETOS JUEGO */
 
 .falling{
 position:absolute;
@@ -44,6 +143,8 @@ width:70px!important;
 height:70px!important;
 }
 
+/* BOTE */
+
 #bin{
 position:absolute;
 bottom:20px;
@@ -53,8 +154,9 @@ height:170px;
 
 #bin img{
 width:170px;
-height:170px;
 }
+
+/* UI */
 
 #score{
 position:absolute;
@@ -80,45 +182,11 @@ padding:6px 10px;
 border-radius:8px;
 }
 
-/* LOBBY */
-
-#lobby{
-position:fixed;
-top:0;
-left:0;
-width:100vw;
-height:100vh;
-background:#9CD74C;
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-z-index:999;
-}
-
-#lobby img{
-max-width:90%;
-height:auto;
-}
-
-#playBtn{
-margin-top:30px;
-font-size:40px;
-padding:20px 60px;
-border:6px solid black;
-border-radius:20px;
-background:#9CD74C;
-cursor:pointer;
-}
-
-/* LOGO */
-
 #logo{
 position:absolute;
 top:20px;
 right:20px;
-width:220px;
-height:auto;
+width:200px;
 }
 
 </style>
@@ -129,13 +197,30 @@ height:auto;
 <!-- LOBBY -->
 
 <div id="lobby">
-<img src="lobby.png">
+
+<img src="logo2.png" id="logoLobby">
+
+<img src="botereciclaje.png" class="lobbyImg" id="reciclaje">
+<img src="botella_plastico.png" class="lobbyImg" id="botella">
+<img src="caja_carton.png" class="lobbyImg" id="caja">
+
+<img src="boteorganico.png" class="lobbyImg" id="organico">
+<img src="manzana.png" class="lobbyImg" id="manzana">
+<img src="platano.png" class="lobbyImg" id="platano">
+
+<img src="botebasura.png" class="lobbyImg" id="basura">
+<img src="envoltura_sabritas.png" class="lobbyImg" id="sabritas">
+<img src="papel_usado.png" class="lobbyImg" id="papel">
+
 <button id="playBtn">Jugar</button>
+
 </div>
+
+<!-- GAME -->
 
 <div id="game">
 
-<img src="logo.png" id="logo">
+<img src="logo2.png" id="logo">
 
 <div id="score">Puntos: 0</div>
 <div id="containerType">Contenedor:</div>
@@ -146,12 +231,10 @@ height:auto;
 
 <script>
 
-/* LOBBY */
+const lobby=document.getElementById("lobby")
+const playBtn=document.getElementById("playBtn")
 
-const lobby = document.getElementById("lobby")
-const playBtn = document.getElementById("playBtn")
-
-playBtn.onclick = ()=>{
+playBtn.onclick=()=>{
 lobby.style.display="none"
 musica.play()
 }
@@ -187,40 +270,19 @@ musica.volume=0.25
 /* CONTROLES */
 
 document.addEventListener("keydown",e=>{
-
-if(e.key==="a"||e.key==="ArrowLeft"){
-moveLeft=true
-}
-
-if(e.key==="d"||e.key==="ArrowRight"){
-moveRight=true
-}
-
+if(e.key==="a"||e.key==="ArrowLeft") moveLeft=true
+if(e.key==="d"||e.key==="ArrowRight") moveRight=true
 })
 
 document.addEventListener("keyup",e=>{
-
-if(e.key==="a"||e.key==="ArrowLeft"){
-moveLeft=false
-}
-
-if(e.key==="d"||e.key==="ArrowRight"){
-moveRight=false
-}
-
+if(e.key==="a"||e.key==="ArrowLeft") moveLeft=false
+if(e.key==="d"||e.key==="ArrowRight") moveRight=false
 })
-
-/* MOVIMIENTO */
 
 setInterval(()=>{
 
-if(moveLeft){
-binX-=speed
-}
-
-if(moveRight){
-binX+=speed
-}
+if(moveLeft) binX-=speed
+if(moveRight) binX+=speed
 
 binX=Math.max(0,Math.min(window.innerWidth-bin.offsetWidth,binX))
 bin.style.left=binX+"px"
@@ -230,63 +292,45 @@ bin.style.left=binX+"px"
 /* CONTENEDORES */
 
 const containers=[
-
 {type:"reciclaje",img:"botereciclaje.png",name:"Reciclaje"},
 {type:"organico",img:"boteorganico.png",name:"Orgánico"},
 {type:"basura",img:"botebasura.png",name:"Basura general"}
-
 ]
 
 /* OBJETOS */
 
 const items=[
-
 {type:"reciclaje",img:"botella_plastico.png"},
 {type:"reciclaje",img:"caja_carton.png"},
-
 {type:"organico",img:"manzana.png",class:"manzana"},
 {type:"organico",img:"platano.png",class:"grande"},
-
 {type:"basura",img:"papel_usado.png"},
 {type:"basura",img:"envoltura_sabritas.png",class:"muy-grande"}
-
 ]
-
-/* CAMBIAR CONTENEDOR */
 
 function changeContainer(){
 
 const r=containers[Math.floor(Math.random()*containers.length)]
 
 currentContainer=r.type
-
 bin.innerHTML=`<img src="${r.img}">`
-
 containerDisplay.textContent="Contenedor: "+r.name
 
 }
 
-/* CONTADOR */
-
 setInterval(()=>{
 
 timerDisplay.textContent="Cambio de bote en: "+timeLeft
-
 timeLeft--
 
 if(timeLeft<0){
-
 changeContainer()
-
 timeLeft=5
-
 }
 
 },1000)
 
 changeContainer()
-
-/* CREAR OBJETOS */
 
 function createItem(){
 
@@ -303,7 +347,6 @@ img.src=r.img
 if(r.class) img.classList.add(r.class)
 
 el.appendChild(img)
-
 game.appendChild(el)
 
 const fall=setInterval(()=>{
@@ -357,4 +400,3 @@ setInterval(createItem,1000)
 
 </body>
 </html>
-
