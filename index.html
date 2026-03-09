@@ -5,333 +5,353 @@
 <title>ChuecoCatch</title>
 
 <style>
-body {
-    margin: 0;
-    overflow: hidden;
-    background: #87CEEB;
-    font-family: Arial, sans-serif;
+
+body{
+margin:0;
+overflow:hidden;
+background:#87CEEB;
+font-family:Arial;
 }
 
-#game {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
+#game{
+position:relative;
+width:100vw;
+height:100vh;
 }
 
-.falling {
-    position: absolute;
+.falling{
+position:absolute;
 }
 
-.falling img {
-    width: 45px;
-    height: 45px;
-    pointer-events: none;
+.falling img{
+width:45px;
+height:45px;
+pointer-events:none;
 }
 
-.manzana {
-    width: 26px !important;
-    height: 26px !important;
+.manzana{
+width:26px!important;
+height:26px!important;
 }
 
-.grande {
-    width: 65px !important;
-    height: 65px !important;
+.grande{
+width:65px!important;
+height:65px!important;
 }
 
-.muy-grande {
-    width: 70px !important;
-    height: 70px !important;
+.muy-grande{
+width:70px!important;
+height:70px!important;
 }
 
-#bin {
-    position: absolute;
-    bottom: 20px;
-    width: 170px;
-    height: 170px;
+#bin{
+position:absolute;
+bottom:20px;
+width:170px;
+height:170px;
 }
 
-#bin img {
-    width: 170px;
-    height: 170px;
+#bin img{
+width:170px;
+height:170px;
 }
 
-#score {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 20px;
+#score{
+position:absolute;
+top:10px;
+left:10px;
+font-size:20px;
 }
 
-#containerType {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 20px;
+#containerType{
+position:absolute;
+top:10px;
+right:10px;
+font-size:20px;
 }
 
-#timer {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    font-size: 18px;
-    background: rgba(255,255,255,0.8);
-    padding: 6px 10px;
-    border-radius: 8px;
+#timer{
+position:absolute;
+bottom:10px;
+right:10px;
+font-size:18px;
+background:rgba(255,255,255,0.8);
+padding:6px 10px;
+border-radius:8px;
 }
 
 /* LOBBY */
 
 #lobby{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100vw;
-    height:100vh;
-    background:#9CD74C;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    z-index:999;
+position:fixed;
+top:0;
+left:0;
+width:100vw;
+height:100vh;
+background:#9CD74C;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:999;
 }
 
-#lobbyImg{
-    width:100%;
-    max-width:1100px;
+#lobby img{
+max-width:90%;
+height:auto;
 }
 
 #playBtn{
-    position:absolute;
-    bottom:120px;
-    right:200px;
-    font-size:40px;
-    padding:20px 60px;
-    border:6px solid black;
-    border-radius:20px;
-    background:#9CD74C;
-    cursor:pointer;
+margin-top:30px;
+font-size:40px;
+padding:20px 60px;
+border:6px solid black;
+border-radius:20px;
+background:#9CD74C;
+cursor:pointer;
 }
 
 /* LOGO */
 
 #logo{
-    position:absolute;
-    top:20px;
-    right:20px;
-    width:200px;
-    height:auto;
+position:absolute;
+top:20px;
+right:20px;
+width:220px;
+height:auto;
 }
+
 </style>
 </head>
 
 <body>
 
+<!-- LOBBY -->
+
 <div id="lobby">
-    <img src="lobby.png" id="lobbyImg">
-    <button id="playBtn">Jugar</button>
+<img src="lobby.png">
+<button id="playBtn">Jugar</button>
 </div>
 
 <div id="game">
 
-    <img src="logo.png" id="logo">
+<img src="logo.png" id="logo">
 
-    <div id="score">Puntos: 0</div>
-    <div id="containerType">Contenedor:</div>
-    <div id="timer">Cambio de bote en: 5</div>
-    <div id="bin"></div>
+<div id="score">Puntos: 0</div>
+<div id="containerType">Contenedor:</div>
+<div id="timer">Cambio de bote en: 5</div>
+<div id="bin"></div>
 
 </div>
 
 <script>
 
-const lobby = document.getElementById("lobby");
-const playBtn = document.getElementById("playBtn");
+/* LOBBY */
 
-playBtn.onclick = () => {
-    lobby.style.display = "none";
-};
+const lobby = document.getElementById("lobby")
+const playBtn = document.getElementById("playBtn")
 
-const game = document.getElementById("game");
-const bin = document.getElementById("bin");
-const scoreDisplay = document.getElementById("score");
-const containerDisplay = document.getElementById("containerType");
-const timerDisplay = document.getElementById("timer");
+playBtn.onclick = ()=>{
+lobby.style.display="none"
+musica.play()
+}
 
-/* posición inicial */
-let binX = window.innerWidth / 2 - 85;
-bin.style.left = binX + "px";
+/* VARIABLES */
 
-let moveLeft = false;
-let moveRight = false;
-const speed = 7;
+const game=document.getElementById("game")
+const bin=document.getElementById("bin")
+const scoreDisplay=document.getElementById("score")
+const containerDisplay=document.getElementById("containerType")
+const timerDisplay=document.getElementById("timer")
 
-let score = 0;
-let currentContainer = "";
-let timeLeft = 5;
+let binX=window.innerWidth/2-85
+bin.style.left=binX+"px"
+
+let moveLeft=false
+let moveRight=false
+const speed=7
+
+let score=0
+let currentContainer=""
+let timeLeft=5
 
 /* SONIDOS */
-const sonidoCorrecto = new Audio("correcto.mp3");
-const sonidoIncorrecto = new Audio("incorrecto.mp3");
-const musica = new Audio("musica.mp3");
 
-musica.loop = true;
-musica.volume = 0.25;
+const sonidoCorrecto=new Audio("correcto.mp3")
+const sonidoIncorrecto=new Audio("incorrecto.mp3")
+const musica=new Audio("musica.mp3")
 
-window.addEventListener("click", () => {
-    musica.play();
-});
+musica.loop=true
+musica.volume=0.25
 
 /* CONTROLES */
 
-document.addEventListener("keydown", e => {
+document.addEventListener("keydown",e=>{
 
-    if (e.key === "a" || e.key === "ArrowLeft") {
-        moveLeft = true;
-    }
+if(e.key==="a"||e.key==="ArrowLeft"){
+moveLeft=true
+}
 
-    if (e.key === "d" || e.key === "ArrowRight") {
-        moveRight = true;
-    }
+if(e.key==="d"||e.key==="ArrowRight"){
+moveRight=true
+}
 
-});
+})
 
-document.addEventListener("keyup", e => {
+document.addEventListener("keyup",e=>{
 
-    if (e.key === "a" || e.key === "ArrowLeft") {
-        moveLeft = false;
-    }
+if(e.key==="a"||e.key==="ArrowLeft"){
+moveLeft=false
+}
 
-    if (e.key === "d" || e.key === "ArrowRight") {
-        moveRight = false;
-    }
+if(e.key==="d"||e.key==="ArrowRight"){
+moveRight=false
+}
 
-});
+})
 
-/* movimiento continuo */
+/* MOVIMIENTO */
 
-setInterval(() => {
+setInterval(()=>{
 
-    if (moveLeft) {
-        binX -= speed;
-    }
+if(moveLeft){
+binX-=speed
+}
 
-    if (moveRight) {
-        binX += speed;
-    }
+if(moveRight){
+binX+=speed
+}
 
-    binX = Math.max(0, Math.min(window.innerWidth - bin.offsetWidth, binX));
-    bin.style.left = binX + "px";
+binX=Math.max(0,Math.min(window.innerWidth-bin.offsetWidth,binX))
+bin.style.left=binX+"px"
 
-}, 16);
-
+},16)
 
 /* CONTENEDORES */
-const containers = [
-    { type: "reciclaje", img: "botereciclaje.png", name: "Reciclaje" },
-    { type: "organico", img: "boteorganico.png", name: "Orgánico" },
-    { type: "basura", img: "botebasura.png", name: "Basura general" }
-];
+
+const containers=[
+
+{type:"reciclaje",img:"botereciclaje.png",name:"Reciclaje"},
+{type:"organico",img:"boteorganico.png",name:"Orgánico"},
+{type:"basura",img:"botebasura.png",name:"Basura general"}
+
+]
 
 /* OBJETOS */
-const items = [
-    { type: "reciclaje", img: "botella_plastico.png" },
-    { type: "reciclaje", img: "caja_carton.png" },
 
-    { type: "organico", img: "manzana.png", class: "manzana" },
-    { type: "organico", img: "platano.png", class: "grande" },
+const items=[
 
-    { type: "basura", img: "papel_usado.png" },
-    { type: "basura", img: "envoltura_sabritas.png", class: "muy-grande" }
-];
+{type:"reciclaje",img:"botella_plastico.png"},
+{type:"reciclaje",img:"caja_carton.png"},
 
-/* cambiar contenedor */
+{type:"organico",img:"manzana.png",class:"manzana"},
+{type:"organico",img:"platano.png",class:"grande"},
 
-function changeContainer() {
-    const r = containers[Math.floor(Math.random() * containers.length)];
-    currentContainer = r.type;
-    bin.innerHTML = `<img src="${r.img}" alt="${r.name}">`;
-    containerDisplay.textContent = `Contenedor: ${r.name}`;
+{type:"basura",img:"papel_usado.png"},
+{type:"basura",img:"envoltura_sabritas.png",class:"muy-grande"}
+
+]
+
+/* CAMBIAR CONTENEDOR */
+
+function changeContainer(){
+
+const r=containers[Math.floor(Math.random()*containers.length)]
+
+currentContainer=r.type
+
+bin.innerHTML=`<img src="${r.img}">`
+
+containerDisplay.textContent="Contenedor: "+r.name
+
 }
 
-/* contador */
+/* CONTADOR */
 
-setInterval(() => {
+setInterval(()=>{
 
-    timerDisplay.textContent = `Cambio de bote en: ${timeLeft}`;
-    timeLeft--;
+timerDisplay.textContent="Cambio de bote en: "+timeLeft
 
-    if (timeLeft < 0) {
-        changeContainer();
-        timeLeft = 5;
-    }
+timeLeft--
 
-}, 1000);
+if(timeLeft<0){
 
-changeContainer();
+changeContainer()
 
-/* crear objetos */
+timeLeft=5
 
-function createItem() {
-
-    const r = items[Math.floor(Math.random() * items.length)];
-
-    const el = document.createElement("div");
-    el.className = "falling";
-    el.style.left = Math.random() * (window.innerWidth - 85) + "px";
-    el.style.top = "0px";
-
-    const img = document.createElement("img");
-    img.src = r.img;
-
-    if (r.class) img.classList.add(r.class);
-
-    el.appendChild(img);
-    game.appendChild(el);
-
-    const fall = setInterval(() => {
-
-        el.style.top = (parseInt(el.style.top) + 5) + "px";
-
-        const b = bin.getBoundingClientRect();
-        const i = el.getBoundingClientRect();
-
-        if (
-            i.bottom >= b.top &&
-            i.left + i.width / 2 >= b.left &&
-            i.right - i.width / 2 <= b.right
-        ) {
-
-            if (r.type === currentContainer) {
-
-                score += 10;
-                sonidoCorrecto.pause();
-                sonidoCorrecto.currentTime = 0;
-                sonidoCorrecto.play();
-
-            } else {
-
-                score -= 5;
-                sonidoIncorrecto.pause();
-                sonidoIncorrecto.currentTime = 0;
-                sonidoIncorrecto.play();
-
-            }
-
-            scoreDisplay.textContent = "Puntos: " + score;
-
-            el.remove();
-            clearInterval(fall);
-        }
-
-        if (parseInt(el.style.top) > window.innerHeight) {
-            el.remove();
-            clearInterval(fall);
-        }
-
-    }, 20);
 }
 
-setInterval(createItem, 1000);
+},1000)
+
+changeContainer()
+
+/* CREAR OBJETOS */
+
+function createItem(){
+
+const r=items[Math.floor(Math.random()*items.length)]
+
+const el=document.createElement("div")
+el.className="falling"
+el.style.left=Math.random()*(window.innerWidth-85)+"px"
+el.style.top="0px"
+
+const img=document.createElement("img")
+img.src=r.img
+
+if(r.class) img.classList.add(r.class)
+
+el.appendChild(img)
+
+game.appendChild(el)
+
+const fall=setInterval(()=>{
+
+el.style.top=(parseInt(el.style.top)+5)+"px"
+
+const b=bin.getBoundingClientRect()
+const i=el.getBoundingClientRect()
+
+if(
+i.bottom>=b.top &&
+i.left+i.width/2>=b.left &&
+i.right-i.width/2<=b.right
+){
+
+if(r.type===currentContainer){
+
+score+=10
+sonidoCorrecto.currentTime=0
+sonidoCorrecto.play()
+
+}else{
+
+score-=5
+sonidoIncorrecto.currentTime=0
+sonidoIncorrecto.play()
+
+}
+
+scoreDisplay.textContent="Puntos: "+score
+
+el.remove()
+clearInterval(fall)
+
+}
+
+if(parseInt(el.style.top)>window.innerHeight){
+
+el.remove()
+clearInterval(fall)
+
+}
+
+},20)
+
+}
+
+setInterval(createItem,1000)
 
 </script>
 
