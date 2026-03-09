@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>tun tun saul</title>
+<title>ChuecoCatch</title>
 
 <style>
 body {
@@ -78,19 +78,78 @@ body {
     padding: 6px 10px;
     border-radius: 8px;
 }
+
+/* LOBBY */
+
+#lobby{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100vw;
+    height:100vh;
+    background:#9CD74C;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    z-index:999;
+}
+
+#lobbyImg{
+    width:100%;
+    max-width:1100px;
+}
+
+#playBtn{
+    position:absolute;
+    bottom:120px;
+    right:200px;
+    font-size:40px;
+    padding:20px 60px;
+    border:6px solid black;
+    border-radius:20px;
+    background:#9CD74C;
+    cursor:pointer;
+}
+
+/* LOGO */
+
+#logo{
+    position:absolute;
+    top:20px;
+    right:20px;
+    width:200px;
+    height:auto;
+}
 </style>
 </head>
 
 <body>
 
+<div id="lobby">
+    <img src="lobby.png" id="lobbyImg">
+    <button id="playBtn">Jugar</button>
+</div>
+
 <div id="game">
+
+    <img src="logo.png" id="logo">
+
     <div id="score">Puntos: 0</div>
     <div id="containerType">Contenedor:</div>
     <div id="timer">Cambio de bote en: 5</div>
     <div id="bin"></div>
+
 </div>
 
 <script>
+
+const lobby = document.getElementById("lobby");
+const playBtn = document.getElementById("playBtn");
+
+playBtn.onclick = () => {
+    lobby.style.display = "none";
+};
 
 const game = document.getElementById("game");
 const bin = document.getElementById("bin");
@@ -278,6 +337,3 @@ setInterval(createItem, 1000);
 
 </body>
 </html>
-
-
-
