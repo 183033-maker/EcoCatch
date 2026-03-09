@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>EcoCatch</title>
+<title>ChuecoCatch</title>
 
 <style>
 
@@ -37,8 +37,8 @@ z-index:999;
 
 #logoLobby{
 position:absolute;
-top:15px;
-right:15px;
+top:20px;
+right:10px;
 width:200px;
 opacity:0.55;
 }
@@ -53,59 +53,59 @@ position:absolute;
 
 #reciclaje{
 top:80px;
-left:90px;
+left:120px;
 width:150px;
 }
 
 #botella{
-top:50px;
-left:270px;
+top:70px;
+left:320px;
 width:65px;
 }
 
 #caja{
 top:140px;
-left:270px;
+left:320px;
 width:75px;
 }
 
 /* ORGANICO */
 
 #organico{
-top:260px;
-left:90px;
+top:250px;
+left:120px;
 width:150px;
 }
 
 #manzana{
-top:270px;
-left:270px;
+top:250px;
+left:320px;
 width:60px;
 }
 
 #platano{
-top:350px;
-left:270px;
+top:330px;
+left:320px;
 width:95px;
 }
 
 /* BASURA */
 
 #basura{
-top:460px;
-left:90px;
+top:450px;
+left:120px;
 width:150px;
 }
 
 #sabritas{
-top:470px;
-left:270px;
+top:450px;
+left:320px;
 width:85px;
 }
 
 #papel{
-top:540px;
-left:270px;
+top:530px;
+left:320px;
 width:65px;
 }
 
@@ -121,6 +121,22 @@ border:8px solid black;
 border-radius:20px;
 background:#9ED84E;
 cursor:pointer;
+}
+
+/* BOTON REINICIO */
+
+#restartBtn{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:40px;
+padding:20px 60px;
+border:6px solid black;
+border-radius:20px;
+background:white;
+cursor:pointer;
+display:none;
 }
 
 /* OBJETOS JUEGO */
@@ -190,8 +206,6 @@ padding:6px 12px;
 border-radius:8px;
 }
 
-/* LOGO */
-
 #logo{
 position:absolute;
 top:30px;
@@ -232,7 +246,10 @@ opacity:0.55;
 <div id="score">Puntos: 0</div>
 <div id="containerType">Contenedor:</div>
 <div id="timer">Tiempo: 3:00</div>
+
 <div id="bin"></div>
+
+<button id="restartBtn">Jugar de nuevo</button>
 
 </div>
 
@@ -240,15 +257,16 @@ opacity:0.55;
 
 const lobby=document.getElementById("lobby")
 const playBtn=document.getElementById("playBtn")
-
-let gameStarted=false
-let gameOver=false
+const restartBtn=document.getElementById("restartBtn")
 
 playBtn.onclick=()=>{
 lobby.style.display="none"
 musica.play()
-gameStarted=true
 startGameTimer()
+}
+
+restartBtn.onclick=()=>{
+location.reload()
 }
 
 /* VARIABLES */
@@ -270,7 +288,9 @@ let score=0
 let currentContainer=""
 let timeLeft=5
 
-/* TEMPORIZADOR 3 MIN */
+let gameOver=false
+
+/* TEMPORIZADOR */
 
 let gameTime=180
 
@@ -297,6 +317,8 @@ if(gameTime<=0){
 gameOver=true
 timerDisplay.textContent="¡El juego ha terminado!"
 musica.pause()
+
+restartBtn.style.display="block"
 
 }
 
@@ -457,4 +479,3 @@ setInterval(createItem,1000)
 
 </body>
 </html>
-
