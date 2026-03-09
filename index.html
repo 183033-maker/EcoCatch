@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>ChuecoCatch</title>
+<title>HugoAramburo</title>
 
 <style>
 
@@ -181,18 +181,21 @@ font-size:20px;
 
 #timer{
 position:absolute;
-bottom:10px;
-right:10px;
-font-size:18px;
+top:10px;
+left:50%;
+transform:translateX(-50%);
+font-size:22px;
 background:rgba(255,255,255,0.8);
-padding:6px 10px;
+padding:6px 12px;
 border-radius:8px;
 }
 
+/* LOGO */
+
 #logo{
 position:absolute;
-top:20px;
-right:20px;
+top:30px;
+right:5px;
 width:200px;
 opacity:0.55;
 }
@@ -201,8 +204,6 @@ opacity:0.55;
 </head>
 
 <body>
-
-<!-- LOBBY -->
 
 <div id="lobby">
 
@@ -224,15 +225,13 @@ opacity:0.55;
 
 </div>
 
-<!-- GAME -->
-
 <div id="game">
 
 <img src="logo2.png" id="logo">
 
 <div id="score">Puntos: 0</div>
 <div id="containerType">Contenedor:</div>
-<div id="timer">Cambio de bote en: 5</div>
+<div id="timer">Tiempo: 3:00</div>
 <div id="bin"></div>
 
 </div>
@@ -242,9 +241,14 @@ opacity:0.55;
 const lobby=document.getElementById("lobby")
 const playBtn=document.getElementById("playBtn")
 
+let gameStarted=false
+let gameOver=false
+
 playBtn.onclick=()=>{
 lobby.style.display="none"
 musica.play()
+gameStarted=true
+startGameTimer()
 }
 
 /* VARIABLES */
@@ -265,6 +269,40 @@ const speed=7
 let score=0
 let currentContainer=""
 let timeLeft=5
+
+/* TEMPORIZADOR 3 MIN */
+
+let gameTime=180
+
+function startGameTimer(){
+
+const timer=setInterval(()=>{
+
+if(gameOver){
+clearInterval(timer)
+return
+}
+
+gameTime--
+
+let minutes=Math.floor(gameTime/60)
+let seconds=gameTime%60
+
+if(seconds<10) seconds="0"+seconds
+
+timerDisplay.textContent="Tiempo: "+minutes+":"+seconds
+
+if(gameTime<=0){
+
+gameOver=true
+timerDisplay.textContent="¡El juego ha terminado!"
+musica.pause()
+
+}
+
+},1000)
+
+}
 
 /* SONIDOS */
 
@@ -288,6 +326,8 @@ if(e.key==="d"||e.key==="ArrowRight") moveRight=false
 })
 
 setInterval(()=>{
+
+if(gameOver) return
 
 if(moveLeft) binX-=speed
 if(moveRight) binX+=speed
@@ -328,7 +368,8 @@ containerDisplay.textContent="Contenedor: "+r.name
 
 setInterval(()=>{
 
-timerDisplay.textContent="Cambio de bote en: "+timeLeft
+if(gameOver) return
+
 timeLeft--
 
 if(timeLeft<0){
@@ -341,6 +382,8 @@ timeLeft=5
 changeContainer()
 
 function createItem(){
+
+if(gameOver) return
 
 const r=items[Math.floor(Math.random()*items.length)]
 
@@ -358,6 +401,12 @@ el.appendChild(img)
 game.appendChild(el)
 
 const fall=setInterval(()=>{
+
+if(gameOver){
+el.remove()
+clearInterval(fall)
+return
+}
 
 el.style.top=(parseInt(el.style.top)+5)+"px"
 
