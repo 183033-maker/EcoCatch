@@ -2,191 +2,106 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>chantilli</title>
+<title>Guardianes del Planeta</title>
 
 <style>
 
 body{
-margin:0;
-overflow:hidden;
-background:#87CEEB;
-font-family:Arial;
-}
-
-/* GAME */
-
-#game{
-position:relative;
-width:100vw;
-height:100vh;
-}
-
-/* LOBBY */
-
-#lobby{
-position:fixed;
-top:0;
-left:0;
-width:100vw;
-height:100vh;
-background:#9ED84E;
-z-index:999;
+    margin:0;
+    background:#9ED24B;
+    font-family:Arial;
 }
 
 /* LOGO */
-
-#logoLobby{
-position:absolute;
-top:40px;
-right:60px;
-width:200px;
+#logo{
+    position:absolute;
+    top:10px;
+    right:10px;
+    width:180px;
+    opacity:0.6;
 }
 
-/* IMAGENES LOBBY */
+/* BASUREROS */
 
-.lobbyImg{
-position:absolute;
+.basura{
+    position:absolute;
+    width:90px;
 }
 
 #reciclaje{
-top:60px;
-left:70px;
-width:140px;
-}
-
-#botella{
-top:30px;
-left:240px;
-width:60px;
-}
-
-#caja{
-top:110px;
-left:240px;
-width:70px;
+    top:120px;
+    left:120px;
 }
 
 #organico{
-top:200px;
-left:70px;
-width:140px;
+    top:320px;
+    left:120px;
 }
+
+#general{
+    top:560px;
+    left:120px;
+}
+
+/* OBJETOS */
+
+.objeto{
+    position:absolute;
+    width:60px;
+}
+
+/* fila 1 */
+
+#botella{
+    top:60px;
+    left:260px;
+}
+
+#caja{
+    top:150px;
+    left:260px;
+}
+
+/* fila 2 */
 
 #manzana{
-top:210px;
-left:240px;
-width:55px;
+    top:330px;
+    left:260px;
 }
 
-#platano{
-top:280px;
-left:240px;
-width:90px;
+#banana{
+    top:420px;
+    left:260px;
 }
 
-#basura{
-top:380px;
-left:70px;
-width:140px;
-}
+/* fila 3 */
 
-#sabritas{
-top:390px;
-left:240px;
-width:80px;
+#papas{
+    top:610px;
+    left:260px;
 }
 
 #papel{
-top:450px;
-left:240px;
-width:60px;
+    top:690px;
+    left:260px;
 }
 
 /* BOTON JUGAR */
 
-#playBtn{
-position:absolute;
-bottom:120px;
-right:160px;
-font-size:50px;
-padding:25px 70px;
-border:8px solid black;
-border-radius:20px;
-background:#9ED84E;
-cursor:pointer;
+#jugar{
+    position:absolute;
+    bottom:80px;
+    right:120px;
+    font-size:50px;
+    padding:25px 90px;
+    border:8px solid black;
+    border-radius:25px;
+    background:#9ED24B;
+    cursor:pointer;
 }
 
-/* OBJETOS JUEGO */
-
-.falling{
-position:absolute;
-}
-
-.falling img{
-width:45px;
-height:45px;
-pointer-events:none;
-}
-
-.manzana{
-width:26px!important;
-height:26px!important;
-}
-
-.grande{
-width:65px!important;
-height:65px!important;
-}
-
-.muy-grande{
-width:70px!important;
-height:70px!important;
-}
-
-/* BOTE */
-
-#bin{
-position:absolute;
-bottom:20px;
-width:170px;
-height:170px;
-}
-
-#bin img{
-width:170px;
-}
-
-/* UI */
-
-#score{
-position:absolute;
-top:10px;
-left:10px;
-font-size:20px;
-}
-
-#containerType{
-position:absolute;
-top:10px;
-right:10px;
-font-size:20px;
-}
-
-#timer{
-position:absolute;
-bottom:10px;
-right:10px;
-font-size:18px;
-background:rgba(255,255,255,0.8);
-padding:6px 10px;
-border-radius:8px;
-}
-
-#logo{
-position:absolute;
-top:20px;
-right:20px;
-width:200px;
+#jugar:hover{
+    background:#8cc63f;
 }
 
 </style>
@@ -194,207 +109,32 @@ width:200px;
 
 <body>
 
-<!-- LOBBY -->
+<!-- LOGO -->
+<img id="logo" src="logo.png">
 
-<div id="lobby">
+<!-- BASUREROS -->
+<img id="reciclaje" class="basura" src="basura_reciclaje.png">
+<img id="organico" class="basura" src="basura_organica.png">
+<img id="general" class="basura" src="basura_general.png">
 
-<img src="logo2.png" id="logoLobby">
+<!-- OBJETOS -->
+<img id="botella" class="objeto" src="botella.png">
+<img id="caja" class="objeto" src="caja.png">
 
-<img src="botereciclaje.png" class="lobbyImg" id="reciclaje">
-<img src="botella_plastico.png" class="lobbyImg" id="botella">
-<img src="caja_carton.png" class="lobbyImg" id="caja">
+<img id="manzana" class="objeto" src="manzana.png">
+<img id="banana" class="objeto" src="banana.png">
 
-<img src="boteorganico.png" class="lobbyImg" id="organico">
-<img src="manzana.png" class="lobbyImg" id="manzana">
-<img src="platano.png" class="lobbyImg" id="platano">
+<img id="papas" class="objeto" src="papas.png">
+<img id="papel" class="objeto" src="papel.png">
 
-<img src="botebasura.png" class="lobbyImg" id="basura">
-<img src="envoltura_sabritas.png" class="lobbyImg" id="sabritas">
-<img src="papel_usado.png" class="lobbyImg" id="papel">
-
-<button id="playBtn">Jugar</button>
-
-</div>
-
-<!-- GAME -->
-
-<div id="game">
-
-<img src="logo2.png" id="logo">
-
-<div id="score">Puntos: 0</div>
-<div id="containerType">Contenedor:</div>
-<div id="timer">Cambio de bote en: 5</div>
-<div id="bin"></div>
-
-</div>
+<!-- BOTON -->
+<button id="jugar">Jugar</button>
 
 <script>
 
-const lobby=document.getElementById("lobby")
-const playBtn=document.getElementById("playBtn")
-
-playBtn.onclick=()=>{
-lobby.style.display="none"
-musica.play()
+document.getElementById("jugar").onclick = function(){
+    alert("El juego comenzará");
 }
-
-/* VARIABLES */
-
-const game=document.getElementById("game")
-const bin=document.getElementById("bin")
-const scoreDisplay=document.getElementById("score")
-const containerDisplay=document.getElementById("containerType")
-const timerDisplay=document.getElementById("timer")
-
-let binX=window.innerWidth/2-85
-bin.style.left=binX+"px"
-
-let moveLeft=false
-let moveRight=false
-const speed=7
-
-let score=0
-let currentContainer=""
-let timeLeft=5
-
-/* SONIDOS */
-
-const sonidoCorrecto=new Audio("correcto.mp3")
-const sonidoIncorrecto=new Audio("incorrecto.mp3")
-const musica=new Audio("musica.mp3")
-
-musica.loop=true
-musica.volume=0.25
-
-/* CONTROLES */
-
-document.addEventListener("keydown",e=>{
-if(e.key==="a"||e.key==="ArrowLeft") moveLeft=true
-if(e.key==="d"||e.key==="ArrowRight") moveRight=true
-})
-
-document.addEventListener("keyup",e=>{
-if(e.key==="a"||e.key==="ArrowLeft") moveLeft=false
-if(e.key==="d"||e.key==="ArrowRight") moveRight=false
-})
-
-setInterval(()=>{
-
-if(moveLeft) binX-=speed
-if(moveRight) binX+=speed
-
-binX=Math.max(0,Math.min(window.innerWidth-bin.offsetWidth,binX))
-bin.style.left=binX+"px"
-
-},16)
-
-/* CONTENEDORES */
-
-const containers=[
-{type:"reciclaje",img:"botereciclaje.png",name:"Reciclaje"},
-{type:"organico",img:"boteorganico.png",name:"Orgánico"},
-{type:"basura",img:"botebasura.png",name:"Basura general"}
-]
-
-/* OBJETOS */
-
-const items=[
-{type:"reciclaje",img:"botella_plastico.png"},
-{type:"reciclaje",img:"caja_carton.png"},
-{type:"organico",img:"manzana.png",class:"manzana"},
-{type:"organico",img:"platano.png",class:"grande"},
-{type:"basura",img:"papel_usado.png"},
-{type:"basura",img:"envoltura_sabritas.png",class:"muy-grande"}
-]
-
-function changeContainer(){
-
-const r=containers[Math.floor(Math.random()*containers.length)]
-
-currentContainer=r.type
-bin.innerHTML=`<img src="${r.img}">`
-containerDisplay.textContent="Contenedor: "+r.name
-
-}
-
-setInterval(()=>{
-
-timerDisplay.textContent="Cambio de bote en: "+timeLeft
-timeLeft--
-
-if(timeLeft<0){
-changeContainer()
-timeLeft=5
-}
-
-},1000)
-
-changeContainer()
-
-function createItem(){
-
-const r=items[Math.floor(Math.random()*items.length)]
-
-const el=document.createElement("div")
-el.className="falling"
-el.style.left=Math.random()*(window.innerWidth-85)+"px"
-el.style.top="0px"
-
-const img=document.createElement("img")
-img.src=r.img
-
-if(r.class) img.classList.add(r.class)
-
-el.appendChild(img)
-game.appendChild(el)
-
-const fall=setInterval(()=>{
-
-el.style.top=(parseInt(el.style.top)+5)+"px"
-
-const b=bin.getBoundingClientRect()
-const i=el.getBoundingClientRect()
-
-if(
-i.bottom>=b.top &&
-i.left+i.width/2>=b.left &&
-i.right-i.width/2<=b.right
-){
-
-if(r.type===currentContainer){
-
-score+=10
-sonidoCorrecto.currentTime=0
-sonidoCorrecto.play()
-
-}else{
-
-score-=5
-sonidoIncorrecto.currentTime=0
-sonidoIncorrecto.play()
-
-}
-
-scoreDisplay.textContent="Puntos: "+score
-
-el.remove()
-clearInterval(fall)
-
-}
-
-if(parseInt(el.style.top)>window.innerHeight){
-
-el.remove()
-clearInterval(fall)
-
-}
-
-},20)
-
-}
-
-setInterval(createItem,1000)
 
 </script>
 
