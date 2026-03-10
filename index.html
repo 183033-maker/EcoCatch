@@ -117,10 +117,22 @@ bottom:120px;
 right:160px;
 font-size:50px;
 padding:25px 70px;
-border:8px solid black;
+border:8px solid #b38f00;
 border-radius:20px;
-background:#9ED84E;
+background:linear-gradient(#FFD84D,#FFC300);
+color:black;
+font-weight:bold;
 cursor:pointer;
+transition:0.25s;
+box-shadow:0 8px 0 #b38f00;
+}
+
+/* EFECTO MOUSE */
+
+#playBtn:hover{
+background:linear-gradient(#FFE97A,#FFD84D);
+transform:scale(1.15);
+box-shadow:0 10px 0 #b38f00;
 }
 
 /* BOTON REINICIO */
@@ -315,7 +327,7 @@ timerDisplay.textContent="Tiempo: "+minutes+":"+seconds
 if(gameTime<=0){
 
 gameOver=true
-timerDisplay.textContent="¡El juego ha terminado!"
+timerDisplay.textContent="El juego ha terminado"
 musica.pause()
 
 restartBtn.style.display="block"
@@ -363,7 +375,7 @@ bin.style.left=binX+"px"
 
 const containers=[
 {type:"reciclaje",img:"botereciclaje.png",name:"Reciclaje"},
-{type:"organico",img:"boteorganico.png",name:"Orgánico"},
+{type:"organico",img:"boteorganico.png",name:"Organico"},
 {type:"basura",img:"botebasura.png",name:"Basura general"}
 ]
 
@@ -479,13 +491,3 @@ setInterval(createItem,1000)
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
