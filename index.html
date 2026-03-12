@@ -55,63 +55,61 @@ text-shadow:
 position:absolute;
 }
 
-/* RECICLAJE */
+/* BOTES A LA MISMA ALTURA */
 
 #reciclaje{
-top:120px;
+top:220px;
 left:120px;
 width:150px;
 }
 
+#organico{
+top:220px;
+left:420px;
+width:150px;
+}
+
+#basura{
+top:220px;
+left:720px;
+width:150px;
+}
+
+/* OBJETOS LOBBY */
+
 #botella{
-top:110px;
+top:200px;
 left:300px;
 width:65px;
 }
 
 #caja{
-top:180px;
+top:280px;
 left:300px;
 width:75px;
 }
 
-/* ORGANICO */
-
-#organico{
-top:290px;
-left:120px;
-width:150px;
-}
-
 #manzana{
-top:290px;
-left:300px;
+top:200px;
+left:600px;
 width:40px;
 }
 
 #platano{
-top:340px;
-left:270px;
+top:250px;
+left:570px;
 width:95px;
 }
 
-/* BASURA */
-
-#basura{
-top:460px;
-left:120px;
-width:150px;
-}
-
 #sabritas{
-top:510px;
-left:280px;
+top:200px;
+left:900px;
 width:85px;
 }
 
 #papel{
-top:590px;
-left:300px;
+top:280px;
+left:920px;
 width:65px;
 }
 
@@ -242,14 +240,8 @@ background:#ff3b3b;
 }
 
 @keyframes explode{
-0%{
-transform:translate(0,0) scale(1);
-opacity:1;
-}
-100%{
-transform:translate(var(--x),var(--y)) scale(0.2);
-opacity:0;
-}
+0%{transform:translate(0,0) scale(1);opacity:1;}
+100%{transform:translate(var(--x),var(--y)) scale(0.2);opacity:0;}
 }
 
 .catchEffect{
@@ -261,8 +253,6 @@ animation:flash 0.25s;
 50%{transform:scale(1.4)}
 100%{transform:scale(1)}
 }
-
-/* PARPADEO DEL BOTE */
 
 .blink{
 animation:blink 0.4s infinite;
@@ -327,8 +317,6 @@ restartBtn.onclick=()=>{
 location.reload()
 }
 
-/* VARIABLES */
-
 const game=document.getElementById("game")
 const bin=document.getElementById("bin")
 const scoreDisplay=document.getElementById("score")
@@ -347,8 +335,6 @@ let currentContainer=""
 let timeLeft=5
 
 let gameOver=false
-
-/* TEMPORIZADOR */
 
 let gameTime=120
 
@@ -384,16 +370,12 @@ restartBtn.style.display="block"
 
 }
 
-/* SONIDOS */
-
 const sonidoCorrecto=new Audio("correcto.mp3")
 const sonidoIncorrecto=new Audio("incorrecto.mp3")
 const musica=new Audio("musica.mp3")
 
 musica.loop=true
 musica.volume=0.25
-
-/* CONTROLES */
 
 document.addEventListener("keydown",e=>{
 if(e.key==="a"||e.key==="ArrowLeft") moveLeft=true
@@ -492,11 +474,24 @@ setTimeout(()=>p.remove(),600)
 
 }
 
+/* PROBABILIDAD MEJORADA */
+
 function createItem(){
 
 if(gameOver) return
 
-const r=items[Math.floor(Math.random()*items.length)]
+let r
+
+if(Math.random()<0.6){
+
+const filtered=items.filter(i=>i.type===currentContainer)
+r=filtered[Math.floor(Math.random()*filtered.length)]
+
+}else{
+
+r=items[Math.floor(Math.random()*items.length)]
+
+}
 
 const el=document.createElement("div")
 el.className="falling"
@@ -575,5 +570,3 @@ setInterval(createItem,1000)
 
 </body>
 </html>
-
-
