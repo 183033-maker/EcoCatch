@@ -182,7 +182,7 @@ width:70px!important;
 height:70px!important;
 }
 
-/* BOTE */
+/* BOTE DEL JUEGO */
 
 #bin{
 position:absolute;
@@ -193,6 +193,8 @@ height:170px;
 
 #bin img{
 width:170px;
+height:170px;
+object-fit:contain;
 }
 
 /* UI */
@@ -262,8 +264,6 @@ animation:flash 0.25s;
 100%{transform:scale(1)}
 }
 
-/* PARPADEO DEL BOTE */
-
 .blink{
 animation:blink 0.4s infinite;
 }
@@ -313,6 +313,8 @@ animation:blink 0.4s infinite;
 
 <script>
 
+/* LOBBY */
+
 const lobby=document.getElementById("lobby")
 const playBtn=document.getElementById("playBtn")
 const restartBtn=document.getElementById("restartBtn")
@@ -345,7 +347,6 @@ const speed=7
 let score=0
 let currentContainer=""
 let timeLeft=5
-
 let gameOver=false
 
 /* TEMPORIZADOR */
@@ -375,7 +376,6 @@ if(gameTime<=0){
 gameOver=true
 timerDisplay.textContent="El juego ha terminado"
 musica.pause()
-
 restartBtn.style.display="block"
 
 }
@@ -575,6 +575,3 @@ setInterval(createItem,1000)
 
 </body>
 </html>
-
-
-en que parte del codigo esta el bote de basura general dentro del juego
