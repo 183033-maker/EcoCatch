@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>EcoCatch</title>
+<title>Espinaca</title>
 
 <style>
 
@@ -155,7 +155,7 @@ cursor:pointer;
 display:none;
 }
 
-/* OBJETOS */
+/* OBJETOS JUEGO */
 
 .falling{
 position:absolute;
@@ -182,7 +182,7 @@ width:70px!important;
 height:70px!important;
 }
 
-/* BOTE */
+/* BOTE DEL JUEGO */
 
 #bin{
 position:absolute;
@@ -195,13 +195,6 @@ height:170px;
 width:170px;
 height:170px;
 object-fit:contain;
-}
-
-/* BASURA MAS GRANDE */
-
-.basuraGrande{
-width:200px!important;
-height:200px!important;
 }
 
 /* UI */
@@ -231,7 +224,7 @@ padding:6px 12px;
 border-radius:8px;
 }
 
-/* EFECTOS */
+/* EFECTOS VISUALES */
 
 .particle{
 position:absolute;
@@ -242,12 +235,23 @@ pointer-events:none;
 animation:explode 0.6s forwards;
 }
 
-.correct{background:#00ff6a;}
-.wrong{background:#ff3b3b;}
+.correct{
+background:#00ff6a;
+}
+
+.wrong{
+background:#ff3b3b;
+}
 
 @keyframes explode{
-0%{transform:translate(0,0) scale(1);opacity:1;}
-100%{transform:translate(var(--x),var(--y)) scale(0.2);opacity:0;}
+0%{
+transform:translate(0,0) scale(1);
+opacity:1;
+}
+100%{
+transform:translate(var(--x),var(--y)) scale(0.2);
+opacity:0;
+}
 }
 
 .catchEffect{
@@ -309,6 +313,8 @@ animation:blink 0.4s infinite;
 
 <script>
 
+/* LOBBY */
+
 const lobby=document.getElementById("lobby")
 const playBtn=document.getElementById("playBtn")
 const restartBtn=document.getElementById("restartBtn")
@@ -319,7 +325,11 @@ musica.play()
 startGameTimer()
 }
 
-restartBtn.onclick=()=>location.reload()
+restartBtn.onclick=()=>{
+location.reload()
+}
+
+/* VARIABLES */
 
 const game=document.getElementById("game")
 const bin=document.getElementById("bin")
@@ -339,32 +349,42 @@ let currentContainer=""
 let timeLeft=5
 let gameOver=false
 
+/* TEMPORIZADOR */
+
 let gameTime=120
 
 function startGameTimer(){
 
 const timer=setInterval(()=>{
 
-if(gameOver){clearInterval(timer);return}
+if(gameOver){
+clearInterval(timer)
+return
+}
 
 gameTime--
 
-let m=Math.floor(gameTime/60)
-let s=gameTime%60
-if(s<10) s="0"+s
+let minutes=Math.floor(gameTime/60)
+let seconds=gameTime%60
 
-timerDisplay.textContent="Tiempo: "+m+":"+s
+if(seconds<10) seconds="0"+seconds
+
+timerDisplay.textContent="Tiempo: "+minutes+":"+seconds
 
 if(gameTime<=0){
+
 gameOver=true
 timerDisplay.textContent="El juego ha terminado"
 musica.pause()
 restartBtn.style.display="block"
+
 }
 
 },1000)
 
 }
+
+/* SONIDOS */
 
 const sonidoCorrecto=new Audio("correcto.mp3")
 const sonidoIncorrecto=new Audio("incorrecto.mp3")
@@ -372,6 +392,8 @@ const musica=new Audio("musica.mp3")
 
 musica.loop=true
 musica.volume=0.25
+
+/* CONTROLES */
 
 document.addEventListener("keydown",e=>{
 if(e.key==="a"||e.key==="ArrowLeft") moveLeft=true
@@ -395,10 +417,23 @@ bin.style.left=binX+"px"
 
 },16)
 
+/* CONTENEDORES */
+
 const containers=[
 {type:"reciclaje",img:"botereciclaje.png",name:"Reciclaje"},
 {type:"organico",img:"boteorganico.png",name:"Organico"},
 {type:"basura",img:"botebasura.png",name:"Basura general"}
+]
+
+/* OBJETOS */
+
+const items=[
+{type:"reciclaje",img:"botella_plastico.png"},
+{type:"reciclaje",img:"caja_carton.png"},
+{type:"organico",img:"manzana.png",class:"manzana"},
+{type:"organico",img:"platano.png",class:"grande"},
+{type:"basura",img:"papel_usado.png"},
+{type:"basura",img:"envoltura_sabritas.png",class:"muy-grande"}
 ]
 
 function changeContainer(){
@@ -406,18 +441,135 @@ function changeContainer(){
 const r=containers[Math.floor(Math.random()*containers.length)]
 
 currentContainer=r.type
-
-if(r.type==="basura"){
-bin.innerHTML=`<img src="${r.img}" class="basuraGrande">`
-}else{
 bin.innerHTML=`<img src="${r.img}">`
-}
-
 containerDisplay.textContent="Contenedor: "+r.name
 
 }
 
+setInterval(()=>{
+
+if(gameOver) return
+
+timeLeft--
+
+if(timeLeft<=2 && timeLeft>0){
+bin.classList.add("blink")
+}
+
+if(timeLeft<=0){
+
+bin.classList.remove("blink")
 changeContainer()
+timeLeft=5
+
+}
+
+},1000)
+
+changeContainer()
+
+function spawnParticles(x,y,type){
+
+for(let i=0;i<8;i++){
+
+const p=document.createElement("div")
+p.className="particle "+type
+
+const dx=(Math.random()*100-50)+"px"
+const dy=(Math.random()*100-50)+"px"
+
+p.style.left=x+"px"
+p.style.top=y+"px"
+
+p.style.setProperty("--x",dx)
+p.style.setProperty("--y",dy)
+
+game.appendChild(p)
+
+setTimeout(()=>p.remove(),600)
+
+}
+
+}
+
+function createItem(){
+
+if(gameOver) return
+
+const r=items[Math.floor(Math.random()*items.length)]
+
+const el=document.createElement("div")
+el.className="falling"
+el.style.left=Math.random()*(window.innerWidth-85)+"px"
+el.style.top="0px"
+
+const img=document.createElement("img")
+img.src=r.img
+
+if(r.class) img.classList.add(r.class)
+
+el.appendChild(img)
+game.appendChild(el)
+
+const fall=setInterval(()=>{
+
+if(gameOver){
+el.remove()
+clearInterval(fall)
+return
+}
+
+el.style.top=(parseInt(el.style.top)+5)+"px"
+
+const b=bin.getBoundingClientRect()
+const i=el.getBoundingClientRect()
+
+if(
+i.bottom>=b.top &&
+i.left+i.width/2>=b.left &&
+i.right-i.width/2<=b.right
+){
+
+bin.classList.add("catchEffect")
+setTimeout(()=>bin.classList.remove("catchEffect"),200)
+
+if(r.type===currentContainer){
+
+score+=10
+sonidoCorrecto.currentTime=0
+sonidoCorrecto.play()
+
+spawnParticles(i.left,i.top,"correct")
+
+}else{
+
+score-=5
+sonidoIncorrecto.currentTime=0
+sonidoIncorrecto.play()
+
+spawnParticles(i.left,i.top,"wrong")
+
+}
+
+scoreDisplay.textContent="Puntos: "+score
+
+el.remove()
+clearInterval(fall)
+
+}
+
+if(parseInt(el.style.top)>window.innerHeight){
+
+el.remove()
+clearInterval(fall)
+
+}
+
+},20)
+
+}
+
+setInterval(createItem,1000)
 
 </script>
 
