@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>garbanzo</title>
+<title>Espinaca</title>
 
 <style>
 
@@ -262,6 +262,18 @@ animation:flash 0.25s;
 100%{transform:scale(1)}
 }
 
+/* PARPADEO DEL BOTE */
+
+.blink{
+animation:blink 0.4s infinite;
+}
+
+@keyframes blink{
+0%{opacity:1}
+50%{opacity:0.3}
+100%{opacity:1}
+}
+
 </style>
 </head>
 
@@ -291,7 +303,7 @@ animation:flash 0.25s;
 
 <div id="score">Puntos: 0</div>
 <div id="containerType">Contenedor:</div>
-<div id="timer">Tiempo: 3:00</div>
+<div id="timer">Tiempo: 2:00</div>
 
 <div id="bin"></div>
 
@@ -338,7 +350,7 @@ let gameOver=false
 
 /* TEMPORIZADOR */
 
-let gameTime=180
+let gameTime=120
 
 function startGameTimer(){
 
@@ -440,16 +452,21 @@ if(gameOver) return
 
 timeLeft--
 
-if(timeLeft<0){
+if(timeLeft<=2 && timeLeft>0){
+bin.classList.add("blink")
+}
+
+if(timeLeft<=0){
+
+bin.classList.remove("blink")
 changeContainer()
 timeLeft=5
+
 }
 
 },1000)
 
 changeContainer()
-
-/* PARTICULAS */
 
 function spawnParticles(x,y,type){
 
