@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>EcoCatch</title>
+<title>garbanzo</title>
 
 <style>
 
@@ -47,16 +47,6 @@ letter-spacing:4px;
 text-shadow:
 4px 4px 0 rgba(0,0,0,0.25),
 8px 8px 20px rgba(0,0,0,0.2);
-}
-
-/* LOGO LOBBY */
-
-#logoLobby{
-position:absolute;
-top:20px;
-right:10px;
-width:200px;
-opacity:0.55;
 }
 
 /* IMAGENES LOBBY */
@@ -232,12 +222,44 @@ padding:6px 12px;
 border-radius:8px;
 }
 
-#logo{
+/* EFECTOS VISUALES */
+
+.particle{
 position:absolute;
-top:30px;
-right:5px;
-width:200px;
-opacity:0.55;
+width:8px;
+height:8px;
+border-radius:50%;
+pointer-events:none;
+animation:explode 0.6s forwards;
+}
+
+.correct{
+background:#00ff6a;
+}
+
+.wrong{
+background:#ff3b3b;
+}
+
+@keyframes explode{
+0%{
+transform:translate(0,0) scale(1);
+opacity:1;
+}
+100%{
+transform:translate(var(--x),var(--y)) scale(0.2);
+opacity:0;
+}
+}
+
+.catchEffect{
+animation:flash 0.25s;
+}
+
+@keyframes flash{
+0%{transform:scale(1)}
+50%{transform:scale(1.4)}
+100%{transform:scale(1)}
 }
 
 </style>
@@ -248,8 +270,6 @@ opacity:0.55;
 <div id="lobby">
 
 <h1 id="title">EcoCatch</h1>
-
-<img src="logo2.png" id="logoLobby">
 
 <img src="botereciclaje.png" class="lobbyImg" id="reciclaje">
 <img src="botella_plastico.png" class="lobbyImg" id="botella">
@@ -268,8 +288,6 @@ opacity:0.55;
 </div>
 
 <div id="game">
-
-<img src="logo2.png" id="logo">
 
 <div id="score">Puntos: 0</div>
 <div id="containerType">Contenedor:</div>
@@ -431,6 +449,32 @@ timeLeft=5
 
 changeContainer()
 
+/* PARTICULAS */
+
+function spawnParticles(x,y,type){
+
+for(let i=0;i<8;i++){
+
+const p=document.createElement("div")
+p.className="particle "+type
+
+const dx=(Math.random()*100-50)+"px"
+const dy=(Math.random()*100-50)+"px"
+
+p.style.left=x+"px"
+p.style.top=y+"px"
+
+p.style.setProperty("--x",dx)
+p.style.setProperty("--y",dy)
+
+game.appendChild(p)
+
+setTimeout(()=>p.remove(),600)
+
+}
+
+}
+
 function createItem(){
 
 if(gameOver) return
@@ -469,17 +513,24 @@ i.left+i.width/2>=b.left &&
 i.right-i.width/2<=b.right
 ){
 
+bin.classList.add("catchEffect")
+setTimeout(()=>bin.classList.remove("catchEffect"),200)
+
 if(r.type===currentContainer){
 
 score+=10
 sonidoCorrecto.currentTime=0
 sonidoCorrecto.play()
 
+spawnParticles(i.left,i.top,"correct")
+
 }else{
 
 score-=5
 sonidoIncorrecto.currentTime=0
 sonidoIncorrecto.play()
+
+spawnParticles(i.left,i.top,"wrong")
 
 }
 
